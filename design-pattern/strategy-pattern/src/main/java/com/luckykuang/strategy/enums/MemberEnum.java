@@ -1,0 +1,45 @@
+/*
+ * Copyright 2015-2023 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.luckykuang.strategy.enums;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+ * 会员枚举
+ * @author luckykuang
+ * @date 2023/6/20 11:36
+ */
+@Getter
+@AllArgsConstructor
+public enum MemberEnum {
+    ORDINARY_MEMBER(0, "普通会员"),
+    JUNIOR_MEMBER(1, "初级会员"),
+    INTERMEDIATE_MEMBER(2, "中级会员"),
+    SENIOR_MEMBER(3, "高级会员"),
+
+    ;
+
+    /**
+     * 等级
+     */
+    private final Integer level;
+    /**
+     * 描述
+     */
+    private final String desc;
+}
