@@ -16,16 +16,19 @@
 
 package com.luckykuang.strategy.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.luckykuang.strategy.service.MemberUserService;
+import com.luckykuang.strategy.vo.DateListVO;
+import com.luckykuang.strategy.vo.DateVO;
+import com.luckykuang.strategy.vo.MemberUserVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author luckykuang
@@ -48,7 +51,27 @@ public class TestController {
      * 高级会员-充值满1000送300-充值满2000送700-充值满5000送2000
      */
     @PostMapping("save")
-    public ResponseEntity<Boolean> pay(Long id, @JsonSerialize(using = ToStringSerializer.class) BigDecimal amount){
-        return memberUserService.pay(id,amount);
+    public ResponseEntity<Boolean> pay(@RequestBody @Validated MemberUserVO vo){
+        return memberUserService.pay(vo.id(),vo.amount());
+    }
+
+    /**
+     * 举例场景二(写法二)：
+     * ocr识别某个数据报表，将里面正确的时间过滤出来 - 不考虑其他具体场景，比如错误的数据处理暂时不考虑，熟悉策略模式为主
+     * 假设集合里面都是[yyyy-MM-dd/yyyyMMdd]的日期字符串，再参杂一些不符合该格式的字符串
+     * 只获取正确格式[yyyy-MM-dd/yyyyMMdd]的字符串
+     */
+    @PostMapping("checkDate")
+    public ResponseEntity<List<DateListVO>> checkDate(@RequestBody @Validated DateVO vo){
+        return memberUserService.checkDate(vo);
+    }
+
+    /**
+     * 举例场景三(写法二)：用的是年独有的实现
+     * 将集合里面的[yyyy-MM/yyyyMM/yyyy年/yyyy]都只获取[yyyy]格式
+     */
+    @PostMapping("checkDateYear")
+    public ResponseEntity<List<DateListVO>> checkDateYear(@RequestBody @Validated DateVO vo){
+        return memberUserService.checkDateYear(vo);
     }
 }

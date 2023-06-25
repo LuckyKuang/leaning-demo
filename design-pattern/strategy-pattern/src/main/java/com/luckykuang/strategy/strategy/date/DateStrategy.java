@@ -17,18 +17,19 @@
 package com.luckykuang.strategy.strategy.date;
 
 /**
+ * 日期策略抽象类
  * @author luckykuang
  * @date 2023/6/21 10:08
  */
 public abstract class DateStrategy {
 
     /**
-     * 校验日期格式，如果是年-月则替换为年
+     * 特定业务需要，校验日期格式并替换为年，如果是[2023-06]或者[2023年]则替换为[2023]
      * @param dateStr 日期字符串
      * @return 正确的年
      */
     public String checkDateFormatReplaceToYear(String dateStr) {
-        return dateStr;
+        return null;
     }
 
     /**

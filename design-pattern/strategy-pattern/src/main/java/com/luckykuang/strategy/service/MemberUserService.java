@@ -18,9 +18,12 @@ package com.luckykuang.strategy.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.luckykuang.strategy.model.MemberUser;
+import com.luckykuang.strategy.vo.DateListVO;
+import com.luckykuang.strategy.vo.DateVO;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author luckykuang
@@ -28,4 +31,8 @@ import java.math.BigDecimal;
  */
 public interface MemberUserService extends IService<MemberUser> {
     ResponseEntity<Boolean> pay(Long id, BigDecimal amount);
+
+    ResponseEntity<List<DateListVO>> checkDate(DateVO vo);
+
+    ResponseEntity<List<DateListVO>> checkDateYear(DateVO vo);
 }

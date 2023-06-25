@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package com.luckykuang.strategy.strategy.date.impl;
+package com.luckykuang.strategy.vo;
 
-import com.luckykuang.strategy.strategy.date.DateStrategy;
-import com.luckykuang.strategy.utils.DateUtils;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import jakarta.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
 
 /**
- * 例如：2023-06-25 06:13:13
  * @author luckykuang
- * @date 2023/6/21 11:05
+ * @date 2023/6/25 13:39
  */
-public class YyyyMmDdHhMmSsSymbolsStrategy extends DateStrategy {
-    @Override
-    public String checkDateFormat(String dateStr) {
-        return DateUtils.validDateFormat(
-                dateStr,
-                "yyyy-MM-dd HH:mm:ss",
-                "^([1-9]\\d{3})-((0?[1-9])|(1[0-2]))-([0-3]?[0-9]) ((0?[1-9])|(1[0-9])|(2[0-4])):([0-5][0-9]?):([0-5][0-9]?)$");
-    }
+public record MemberUserVO(@NotNull Long id,
+                           @NotNull @JsonSerialize(using = ToStringSerializer.class) BigDecimal amount) {
 }

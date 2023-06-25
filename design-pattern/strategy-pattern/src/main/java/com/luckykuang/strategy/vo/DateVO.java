@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package com.luckykuang.strategy.strategy.date.impl;
+package com.luckykuang.strategy.vo;
 
-import com.luckykuang.strategy.strategy.date.DateStrategy;
-import com.luckykuang.strategy.utils.DateUtils;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+
+import java.util.List;
 
 /**
  * @author luckykuang
- * @date 2023/6/21 17:39
+ * @date 2023/6/25 11:15
  */
-public class YyyyMSymbolsStrategy extends DateStrategy {
-
-    @Override
-    public String checkDateFormatReplaceToYear(String dateStr) {
-        String yyyyMSymbols = DateUtils.validDateFormat(dateStr, "yyyy-M", "^([1-9]\\d{3}-)(0?[1-9]|1[0-2])$");
-        return yyyyMSymbols.substring(4);
-    }
-
-    @Override
-    public String checkDateFormat(String dateStr) {
-        return DateUtils.validDateFormat(dateStr, "yyyy-M", "^([1-9]\\d{3}-)(0?[1-9]|1[0-2])$");
-    }
+public record DateVO(@Valid @NotEmpty List<DateListVO> dateList) {
 }

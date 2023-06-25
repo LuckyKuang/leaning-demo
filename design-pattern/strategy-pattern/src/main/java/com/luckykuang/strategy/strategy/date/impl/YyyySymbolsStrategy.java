@@ -18,21 +18,23 @@ package com.luckykuang.strategy.strategy.date.impl;
 
 import com.luckykuang.strategy.strategy.date.DateStrategy;
 import com.luckykuang.strategy.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
+ * 例如：2023年
  * @author luckykuang
- * @date 2023/6/21 17:39
+ * @date 2023/6/25 11:00
  */
-public class YyyyMStrategy extends DateStrategy {
+public class YyyySymbolsStrategy extends DateStrategy {
 
     @Override
     public String checkDateFormatReplaceToYear(String dateStr) {
-        String yyyyM = DateUtils.validDateFormat(dateStr, "yyyyM", "^([1-9]\\d{3})(0?[1-9]|1[0-2])$");
-        return yyyyM.substring(4);
+        String yyyyMmSymbols = DateUtils.validDateFormat(dateStr, "yyyy年", "^([1-9]\\d{3})年$");
+        return StringUtils.isBlank(yyyyMmSymbols) ? "" : yyyyMmSymbols.substring(0,4);
     }
 
     @Override
     public String checkDateFormat(String dateStr) {
-        return DateUtils.validDateFormat(dateStr, "yyyyM", "^([1-9]\\d{3})(0?[1-9]|1[0-2])$");
+        return DateUtils.validDateFormat(dateStr, "yyyy年", "^([1-9]\\d{3})年$");
     }
 }

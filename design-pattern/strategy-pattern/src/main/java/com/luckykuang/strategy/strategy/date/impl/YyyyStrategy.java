@@ -20,6 +20,7 @@ import com.luckykuang.strategy.strategy.date.DateStrategy;
 import com.luckykuang.strategy.utils.DateUtils;
 
 /**
+ * 例如：2023
  * @author luckykuang
  * @date 2023/6/21 14:50
  */
@@ -27,6 +28,6 @@ public class YyyyStrategy extends DateStrategy {
 
     @Override
     public String checkDateFormat(String dateStr) {
-        return DateUtils.validDateFormat(dateStr, "yyyy", "^[1-9]\\d{3}$");
+        return DateUtils.validDateFormat(dateStr, "yyyy", "^([1-9]\\d{3})$");
     }
 }

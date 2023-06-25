@@ -20,12 +20,16 @@ import com.luckykuang.strategy.strategy.date.DateStrategy;
 import com.luckykuang.strategy.utils.DateUtils;
 
 /**
+ * 例如：2023-06-25 06:13
  * @author luckykuang
  * @date 2023/6/21 11:05
  */
 public class YyyyMmDdHhMmSymbolsStrategy extends DateStrategy {
     @Override
     public String checkDateFormat(String dateStr) {
-        return DateUtils.validDateFormat(dateStr, "yyyy-MM-dd HH:mm", "^[1-9]\\d{3}$");
+        return DateUtils.validDateFormat(
+                dateStr,
+                "yyyy-MM-dd HH:mm",
+                "^([1-9]\\d{3})((0?[1-9])|(1[0-2]))([0-3]?[0-9])((0?[1-9])|(1[0-9])|(2[0-4]))([0-5][0-9]?)$");
     }
 }

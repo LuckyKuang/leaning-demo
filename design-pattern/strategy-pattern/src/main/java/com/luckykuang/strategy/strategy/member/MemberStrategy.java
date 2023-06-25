@@ -19,7 +19,7 @@ package com.luckykuang.strategy.strategy.member;
 import java.math.BigDecimal;
 
 /**
- * 会员策略统一抽象
+ * 会员策略接口
  * 如果所有实现类都是一样的方法，就可以用接口表示
  * 如果有的实现类用的不同的方法，就用抽象类表示，抽象方法集体用，普通方法极个别实现类用
  * @author luckykuang

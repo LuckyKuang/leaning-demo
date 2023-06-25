@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package com.luckykuang.strategy.strategy.date.impl;
+package com.luckykuang.strategy.vo;
 
-import com.luckykuang.strategy.strategy.date.DateStrategy;
-import com.luckykuang.strategy.utils.DateUtils;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author luckykuang
- * @date 2023/6/21 17:40
+ * @date 2023/6/25 14:07
  */
-public class YyyyMdSymbolsStrategy extends DateStrategy {
-    @Override
-    public String checkDateFormat(String dateStr) {
-        return DateUtils.validDateFormat(dateStr, "yyyy-M-d", "^[1-9]\\d{3}$");
-    }
+public record DateListVO(@NotNull Long id,
+                         @NotBlank String dateStr) {
 }

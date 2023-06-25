@@ -42,6 +42,7 @@ public class DateUtils {
     public static String validDateFormat(String dateStr, String format, String regex) {
         boolean matches =  Pattern.matches(regex, dateStr);
         if(!matches){
+            log.info("日期["+dateStr+"]正则校验异常...");
             return "";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
