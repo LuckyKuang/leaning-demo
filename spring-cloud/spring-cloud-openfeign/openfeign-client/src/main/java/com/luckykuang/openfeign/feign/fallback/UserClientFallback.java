@@ -16,10 +16,11 @@
 
 package com.luckykuang.openfeign.feign.fallback;
 
-import com.luckykuang.common.model.User;
 import com.luckykuang.common.exception.BusinessException;
+import com.luckykuang.common.model.User;
 import com.luckykuang.openfeign.feign.UserClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -76,6 +77,16 @@ public class UserClientFallback implements UserClient {
 
     @Override
     public List<User> getUsers() {
+        throw new BusinessException("openfeign exception");
+    }
+
+    @Override
+    public List<User> getUsersByPage(Integer current, Integer size, Long id, String name, Integer age) {
+        throw new BusinessException("openfeign exception");
+    }
+
+    @Override
+    public Boolean uploadFile(MultipartFile file) {
         throw new BusinessException("openfeign exception");
     }
 }

@@ -29,7 +29,7 @@ public abstract class DateStrategy {
      * @return 正确的年
      */
     public String checkDateFormatReplaceToYear(String dateStr) {
-        return null;
+        return "";
     }
 
     /**

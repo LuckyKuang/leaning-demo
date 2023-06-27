@@ -21,6 +21,7 @@ import com.luckykuang.openfeign.feign.fallback.UserClientFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -40,12 +41,12 @@ public interface UserClient {
     @PostMapping("save")
     User save(@RequestBody User user);
 
-    @PostMapping("saveByForm")
+    @PostMapping(value = "saveByForm",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     User saveByForm(User user);
 
     @PostMapping("saveByParam")
     User saveByParam(@RequestParam("name") String name,
-                           @RequestParam("age") Integer age);
+                     @RequestParam("age") Integer age);
 
     @PutMapping("update")
     User update(@RequestParam("id") Long id,
@@ -70,4 +71,14 @@ public interface UserClient {
 
     @GetMapping("getUsers")
     List<User> getUsers();
+
+    @GetMapping("getUsersByPage")
+    List<User> getUsersByPage(@RequestParam("current") Integer current,
+                              @RequestParam("size") Integer size,
+                              @RequestParam("id") Long id,
+                              @RequestParam("name") String name,
+                              @RequestParam("age") Integer age);
+
+    @PostMapping(value = "uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Boolean uploadFile(@RequestPart("file") MultipartFile file);
 }

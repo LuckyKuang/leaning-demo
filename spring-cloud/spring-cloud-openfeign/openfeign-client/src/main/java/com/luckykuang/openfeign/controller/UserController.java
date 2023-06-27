@@ -20,6 +20,7 @@ import com.luckykuang.common.model.User;
 import com.luckykuang.openfeign.feign.UserClient;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -82,5 +83,15 @@ public class UserController {
     @GetMapping("getUsers")
     public List<User> getUsers(){
         return userClient.getUsers();
+    }
+
+    @GetMapping("getUsersByPage")
+    public List<User> getUsersByPage(Integer current, Integer size, User user){
+        return userClient.getUsersByPage(current, size, user.getId(),user.getName(),user.getAge());
+    }
+
+    @PostMapping("uploadFile")
+    public Boolean uploadFile(@RequestPart("file") MultipartFile file){
+        return userClient.uploadFile(file);
     }
 }
