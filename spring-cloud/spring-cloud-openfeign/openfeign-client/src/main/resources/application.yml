@@ -26,3 +26,6 @@ spring:
             connect-timeout: 5000
             # 请求处理超时时间，默认5s，设置单位为毫秒。
             read-timeout: 3000
+      # 开启熔断器
+      circuitbreaker:
+        enabled: true

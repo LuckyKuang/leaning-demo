@@ -17,7 +17,7 @@
 package com.luckykuang.openfeign.feign;
 
 import com.luckykuang.common.model.User;
-import com.luckykuang.openfeign.feign.fallback.UserClientFallback;
+import com.luckykuang.openfeign.feign.factroy.UserClientFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +34,8 @@ import java.util.List;
         name = "openfeign-server",
         // 路径前缀设置
         path = "api/v1/user",
-        // 异常处理
-        fallback = UserClientFallback.class)
+        // 熔断处理
+        fallbackFactory = UserClientFactory.class)
 public interface UserClient {
 
     @PostMapping("save")

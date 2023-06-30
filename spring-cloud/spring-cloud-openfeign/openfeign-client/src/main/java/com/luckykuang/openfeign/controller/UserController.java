@@ -18,7 +18,7 @@ package com.luckykuang.openfeign.controller;
 
 import com.luckykuang.common.model.User;
 import com.luckykuang.openfeign.feign.UserClient;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,10 +30,11 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/v1/user")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Resource
-    private UserClient userClient;
+//    @Resource
+    private final UserClient userClient;
 
     @PostMapping("save")
     public User save(@RequestBody User user){

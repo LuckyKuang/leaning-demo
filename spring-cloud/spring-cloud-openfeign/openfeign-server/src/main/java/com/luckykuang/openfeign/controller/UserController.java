@@ -84,6 +84,7 @@ public class UserController {
 
     @GetMapping("getUsers")
     public List<User> getUsers(){
+        int i = 1/0;
         return userService.getUsers();
     }
 
