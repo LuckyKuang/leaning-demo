@@ -30,6 +30,7 @@
     <modules>
         <module>spring-cloud</module>
         <module>design-pattern</module>
+        <module>multi-thread</module>
     </modules>
 
     <properties>
