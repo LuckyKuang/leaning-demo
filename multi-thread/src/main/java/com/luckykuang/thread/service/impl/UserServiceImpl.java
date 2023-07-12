@@ -27,6 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -39,6 +40,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
     @Override
     public void exportUserExcel(HttpServletResponse response) {
         try {
@@ -56,12 +58,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public ResponseEntity<List<User>> importUserExcel(MultipartFile file) {
         try {
             List<User> userList = EasyExcelFactory.read(file.getInputStream())
                     .head(User.class)
                     .sheet()
                     .doReadSync();
+            saveBatch(userList);
             return ResponseEntity.ok(userList);
         } catch (IOException e) {
             log.error("用户列表导入异常: ",e);
