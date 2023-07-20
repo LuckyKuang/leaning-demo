@@ -68,10 +68,23 @@
         </dependency>
 
         <!--sentinel持久化到nacos 不持久每次重启都会清除规则-->
-        <!-- 2022.0.0.0-RC2版本持久化无法使用，等后续更新 -->
+        <!-- 2022.0.0.0-RC2版本自带的nacos版本持久化无法使用，等后续更新 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-alibaba-sentinel-datasource</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.csp</groupId>
+                    <artifactId>sentinel-datasource-nacos</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- 这个版本的nacos暂时可用 -->
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-datasource-nacos</artifactId>
+            <version>2.0.0-alpha</version>
         </dependency>
 
         <dependency>

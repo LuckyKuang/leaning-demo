@@ -277,8 +277,8 @@ public class UserHandler {
 - `limitApp`：流控针对的调用来源，若为default 则不区分调用来源
 - `grade`：限流阈值类型（QPS 或并发线程数）；0代表根据并发数量来限流，1代表根据QPS来进行流量控制
 - `count`：限流阈值
-- `strategy`：调用关系限流策略（直接、关联、链路）
-- `controlBehavior`：流量控制效果（直接拒绝、Warm Up、匀速排队）
+- `strategy`：调用关系限流策略（0代表直接、1代表关联、2代表链路）
+- `controlBehavior`：流量控制效果（0代表直接拒绝、1代表Warm Up、2代表匀速排队）
 - `clusterMode`：是否为集群模式 true-是 false-否
 
 请求接口：`http://localhost:9010/api/v1/user/getUser?name=x`

@@ -29,63 +29,55 @@ spring:
         dashboard: localhost:8080 # 10.10.22.174:8109
         # Sentinel与控制台交互的端口
         port: 8719
-#        clientIp: localhost
       #服务启动后直接与sentinel建立心跳连接
       eager: true
-#      datasource:
-#        # 名称随意
-#        flow:
-#          nacos:
-#            # nacos连接地址
-#            server-addr: localhost:8848 # 10.10.18.16:8848,10.10.18.16:2848,10.10.18.16:5848
-#            username: nacos
-#            password: nacos
-#            # nacos连接的分组
-#            groupId: SENTINEL_GROUP
-#            # 读取配置文件的名称
-#            dataId: ${spring.application.name}-flow-rules
-#            # 读取配置文件的后缀
-#            data-type: json
-#            # 规则类型，取值见：
-#            # org.springframework.cloud.alibaba.sentinel.datasource.RuleType
-#            # 规则:flow流控规则，degrade降级规则，authority授权规则，system系统规则, param-flow热点key规则
-#            rule-type: flow
-#        degrade:
-#          nacos:
-#            server-addr: localhost:8848
-#            dataId: ${spring.application.name}-degrade-rules
-#            groupId: SENTINEL_GROUP
-#            rule-type: degrade
-#            data-type: json
-#            username: nacos
-#            password: nacos
-#        system:
-#          nacos:
-#            server-addr: localhost:8848
-#            dataId: ${spring.application.name}-system-rules
-#            groupId: SENTINEL_GROUP
-#            rule-type: system
-#            data-type: json
-#            username: nacos
-#            password: nacos
-#        authority:
-#          nacos:
-#            server-addr: localhost:8848
-#            dataId: ${spring.application.name}-authority-rules
-#            groupId: SENTINEL_GROUP
-#            rule-type: authority
-#            data-type: json
-#            username: nacos
-#            password: nacos
-#        param-flow:
-#          nacos:
-#            server-addr: localhost:8848
-#            dataId: ${spring.application.name}-param-flow-rules
-#            groupId: SENTINEL_GROUP
-#            rule-type: param-flow
-#            data-type: json
-#            username: nacos
-#            password: nacos
+      datasource:
+        # 名称随意
+        flow:
+          nacos:
+            # nacos连接地址
+            server-addr: localhost:8848 # 10.10.18.16:8848,10.10.18.16:2848,10.10.18.16:5848
+            username: nacos
+            password: nacos
+            namespace: sentinel
+            # nacos连接的分组
+            groupId: SENTINEL_GROUP
+            # 读取配置文件的名称
+            dataId: ${spring.application.name}-flow-rules
+            # 规则类型:flow(流控)，degrade(熔断)，param-flow(热点)，authority(授权)
+            rule-type: flow
+            # 读取配置文件的后缀
+            data-type: json
+        degrade:
+          nacos:
+            server-addr: localhost:8848
+            username: nacos
+            password: nacos
+            namespace: sentinel
+            groupId: SENTINEL_GROUP
+            dataId: ${spring.application.name}-degrade-rules
+            rule-type: degrade
+            data-type: json
+        param-flow:
+          nacos:
+            server-addr: localhost:8848
+            username: nacos
+            password: nacos
+            namespace: sentinel
+            groupId: SENTINEL_GROUP
+            dataId: ${spring.application.name}-param-flow-rules
+            rule-type: param-flow
+            data-type: json
+        authority:
+          nacos:
+            server-addr: localhost:8848
+            username: nacos
+            password: nacos
+            namespace: sentinel
+            groupId: SENTINEL_GROUP
+            dataId: ${spring.application.name}-authority-rules
+            rule-type: authority
+            data-type: json
 
 #开启sentinel
 feign:
