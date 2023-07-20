@@ -78,12 +78,6 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
         <!-- 解决Spring Cloud LoadBalancer警告日志 end-->
-
-        <!-- consul注册中心 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
