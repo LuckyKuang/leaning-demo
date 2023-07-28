@@ -21,48 +21,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.luckykuang</groupId>
-        <artifactId>spring-cloud</artifactId>
+        <artifactId>spring-cloud-grpc</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <packaging>pom</packaging>
-
-    <artifactId>spring-cloud-grpc</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-
-    <modules>
-        <module>grpc-server</module>
-        <module>grpc-client</module>
-        <module>grpc-common</module>
-    </modules>
+    <artifactId>grpc-common</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-
-        <!-- https://mvnrepository.com/artifact/io.github.lognet/grpc-spring-boot-starter -->
-        <dependency>
-            <groupId>io.github.lognet</groupId>
-            <artifactId>grpc-spring-boot-starter</artifactId>
-            <version>${grpc-starter.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- consul注册中心 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-        </dependency>
-
-    </dependencies>
 
     <build>
         <!-- proto自动生成java文件所需的编译插件 -->
@@ -93,11 +62,13 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.6.1</version>
                 <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
-                    </protocArtifact>
-                    <pluginId>java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
-                    </pluginArtifact>
+                    <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <!--设置grpc生成代码到指定路径-->
+                    <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+                    <!--生成代码前是否清空目录-->
+                    <clearOutputDirectory>false</clearOutputDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -105,6 +76,29 @@
                             <goal>compile</goal>
                             <goal>compile-custom</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 升级SpringBoot3.x后，将javax修改成jakarta -->
+            <plugin>
+                <groupId>io.github.floverfelt</groupId>
+                <artifactId>find-and-replace-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <executions>
+                    <execution>
+                        <id>exec</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>find-and-replace</goal>
+                        </goals>
+                        <configuration>
+                            <replacementType>file-contents</replacementType>
+                            <baseDir>src/main/java/com/luckykuang/common/user/</baseDir>
+                            <findRegex>javax</findRegex>
+                            <replaceValue>jakarta</replaceValue>
+                            <recursive>true</recursive>
+                            <fileMask>.java</fileMask>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

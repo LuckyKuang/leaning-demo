@@ -39,6 +39,7 @@
         <module>spring-cloud-gateway</module>
         <module>spring-cloud-openfeign</module>
         <module>spring-cloud-grpc</module>
+        <module>spring-cloud-alibaba-sentinel</module>
     </modules>
 
     <dependencies>

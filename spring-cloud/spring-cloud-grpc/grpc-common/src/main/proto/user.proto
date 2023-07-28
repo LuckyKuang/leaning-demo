@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.luckykuang.common.user";
+option java_outer_classname = "UserProto";
+
+service UserService {
+  rpc queryUser(UserRequest) returns (UserReply) {}
+}
+
+message UserRequest {
+  int64 id = 2;
+}
+
+message UserReply {
+  int32 code = 1;
+  string msg = 2;
+  bool success = 3;
+  message Data {
+    UserPb userPb = 1;
+  }
+  Data data = 4;
+}
+
+message UserPb {
+  int64 id = 1;
+  string name = 2;
+  string sex = 3;
+}

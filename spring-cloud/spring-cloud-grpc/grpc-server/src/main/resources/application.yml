@@ -1,5 +1,13 @@
 server:
   port: 9004
+
+grpc:
+  port: 6565
+  consul:
+    # 不注册 grpc 服务
+    registration-mode: noop
+
+# consul注册中心
 spring:
   application:
     name: grpc-server
@@ -8,10 +16,36 @@ spring:
       host: 1.12.248.106 # 这里是consul服务端的地址
       port: 8500 # 这是consul服务端的端口
       discovery:
+        metadata:
+          # 用于支持client端调用时，获取该端口
+          grpc-port: ${grpc.port}
+        tags: myWebTag
         health-check-timeout: 5s # 检测超时时间
         health-check-critical-timeout: 10s # 设置超时30秒之后，注销服务,这里数字要大于心跳检测的数字
         heartbeat:
           enabled: true
-          ttl: 5 # 这里开启心跳检测，设置10s提交一次心跳，用于consul与服务不在同一个网段的情况，支持存活检测
+          ttl: 10 # 这里开启心跳检测，设置10s提交一次心跳，用于consul与服务不在同一个网段的情况，支持存活检测
         prefer-ip-address: true
-        instance-group: default # 设置实例所在组
+        register-health-check: true # 健康检查
+
+---
+
+# Eureka注册中心
+
+#server:
+#  port: 9004
+#
+#grpc:
+#  port: 6565
+#
+#spring:
+#  application:
+#    name: grpc-server
+#eureka:
+#  instance:
+#    non-secure-port: 6565
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8080/eureka/

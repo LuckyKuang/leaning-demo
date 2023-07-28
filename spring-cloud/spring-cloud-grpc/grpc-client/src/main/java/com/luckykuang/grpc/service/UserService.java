@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package com.luckykuang.grpc;
+package com.luckykuang.grpc.service;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import com.luckykuang.common.user.UserReply;
 
 /**
  * @author luckykuang
- * @date 2023/6/15 19:21
+ * @date 2023/7/27 17:55
  */
-@EnableDiscoveryClient
-@SpringBootApplication
-//@EnableEurekaServer // Eureka注册中心使用
-public class GrpcServerApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(GrpcServerApplication.class,args);
-    }
+public interface UserService {
+    UserReply queryUser(Integer id);
 }
