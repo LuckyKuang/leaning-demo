@@ -24,9 +24,11 @@ spring:
     sentinel:
       transport:
         # Sentinel DashBoard的地址
-        dashboard: localhost:8080 # 10.10.22.174:8109
-        # Sentinel与控制台交互的端口
+        dashboard: localhost:8109 # 10.10.22.174:8109
+        # Sentinel与控制台交互的端口,冲突会自动加一，最好是先分配好，服务器好开通端口
         port: 8719
+        # 指定和控制台通信的IP，若不配置，会自动选择一个IP注册，不要写localhost
+        clientIp: 192.168.1.100
       #服务启动后直接与sentinel建立心跳连接
       eager: true
       datasource:

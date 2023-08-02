@@ -16,6 +16,63 @@ Linux下后台静默启动方式如下：
 nohup java -server -Xms256m -Xmx256m -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -jar --add-exports=java.base/sun.net.util=ALL-UNNAMED sentinel-dashboard-1.8.6.jar &
 ```
 
+Docker下启动方式如下：
+
+1、下载`sentinel-dashboard-1.8.6.jar`
+
+2、编写Dockerfile文件
+
+```shell
+# this is sentinel-dashboard dockerfile
+# version 1.0
+# 基础镜像
+FROM eclipse-temurin:17-jre-focal
+# 维护人
+MAINTAINER luckykuang<luckykuang@foxmail.com>
+#jar
+COPY ./sentinel-dashboard-1.8.6.jar /home/pontus.fan/sentinel-dashboard.jar
+# 端口
+EXPOSE 8109
+# 执行命令启动jar
+ENTRYPOINT ["java","-jar","/home/pontus.fan/sentinel-dashboard.jar"]
+# 时区
+ENV TIME_ZONE=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TIME_ZONE /etc/localtime && echo $TIME_ZONE > /etc/timezone
+```
+
+3、编写docker-compose.yml文件
+
+```shell
+version: '3.3'
+services:
+  sentinel:
+    build: ./
+    image: senfel/sentinel-dashboard:1.8.6
+    container_name: sentinel-dashboard
+    ports:
+      - 8109:8109
+    environment:
+      JVM_OPTS: "-server -Xmx512M -Xms512M -XX:MaxMetaspaceSize=256M -XX:CompressedClassSpaceSize=50M -XX:ReservedCodeCacheSize=240M -XX:MaxDirectMemorySize=400M"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
+    volumes:
+      - "/home/pontus.fan/sentinel/logs:/root/logs"
+      - "/home/pontus.fan/sentinel/logs:/app-logs"
+    command: [
+      "--server.port=8109",
+      "--add-exports=java.base/sun.net.util=ALL-UNNAMED",
+      "--logging.file.path=/app-logs"
+    ]
+```
+
+4、运行sentinel-dashboard
+```shell
+docker-compose up -d --build
+```
+
 Windows不想后台静默启动，将首尾的`nohup`和`&`去掉即可
 
 具体的启动参数介绍：
@@ -320,11 +377,63 @@ public class UserHandler {
 **测试结果**：
 - 达到异常数熔断策略，也就是接口请求出现异常次数达到设置异常数量时，即会触发`blockHandler`处理
 
+Tips
 
+> 服务在哪里启动，`sentinel`控制台就在哪里启动，它只是一个查看的控制台，不影响已持久化到`Nacos`的配置
 
+## 服务器安装`Nacos`教程，`docker`为例
 
+安装
 
+```shell
+docker pull nacos/nacos-server:v2.2.1-slim
+```
 
+运行
 
+```shell
+docker run -d \
+--name nacos \
+-p 8848:8848 \
+-p 9848:9848 \
+-p 9849:9849 \
+--privileged=true \
+-e JVM_XMS=256m \
+-e JVM_XMX=256m \
+-e MODE=standalone \
+-e NACOS_SERVERS=192.168.1.100 \
+-e NACOS_SERVER_IP=192.168.1.100 \
+-e SPRING_DATASOURCE_PLATFORM=mysql \
+-e MYSQL_SERVICE_HOST=192.168.1.100 \
+-e MYSQL_SERVICE_DB_NAME=nacos_config \
+-e MYSQL_SERVICE_USER=root \
+-e MYSQL_SERVICE_PASSWORD=root \
+-e MYSQL_SERVICE_PORT=3306 \
+-e MYSQL_DATABASE_NUM=1 \
+-e NACOS_AUTH_CACHE_ENABLE=enable \
+-e NACOS_AUTH_TOKEN=SecretKey012345678901234567890123456789012345678901234567890123456789 \
+-e NACOS_AUTH_IDENTITY_KEY=nacos \
+-e NACOS_AUTH_IDENTITY_VALUE=nacos \
+--restart=always \
+nacos/nacos-server:v2.2.1-slim
+```
 
+Tips：
 
+> 1. Nacos2.0版本新增了`gRPC`的通信方式，需要再多开放俩个端口：(与主端口偏移量1000,1001）
+> 9948： 8848+1000
+> 9949： 8848+1001
+> 
+> 2. Nacos2.2.1版本将加密默认值去除了，需自定义
+> NACOS_AUTH_TOKEN=SecretKey012345678901234567890123456789012345678901234567890123456789
+> NACOS_AUTH_IDENTITY_KEY=nacos
+> NACOS_AUTH_IDENTITY_VALUE=nacos
+> 
+> 3. Nacos默认的`MODE`是`cluster`,这是集群模式，如果是测试环境用单机模式需要修改成`standalone`
+> 
+> 4. 如果需要将配置文件和日志持久话到硬盘
+> 启动nacos容器`docker run -p 8848:8848 --name nacos -d nacos/nacos-server:v2.2.1-slim`
+> 复制文件到本地`docker cp nacos:/home/nacos/logs/ /home/pontus.fan/nacos/`和`docker cp nacos:/home/nacos/conf/ /home/pontus.fan/nacos/`
+> 停止nacos容器`docker rm -f nacos`
+> 修改数据库配置`vim /home/pontus.fan/nacos/conf/application.properties`
+> 重新启动nacos，需要映射目录
