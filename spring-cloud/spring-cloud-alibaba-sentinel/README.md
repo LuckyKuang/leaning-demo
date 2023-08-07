@@ -166,7 +166,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("api/v1/userVo")
 public class UserController {
 
     @Resource
@@ -214,7 +214,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("api/v1/userVo")
 public class UserController {
 
     @Resource
@@ -264,7 +264,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("api/v1/userVo")
 public class UserController {
 
     @Resource
@@ -338,10 +338,10 @@ public class UserHandler {
 - `controlBehavior`：流量控制效果（0代表直接拒绝、1代表Warm Up、2代表匀速排队）
 - `clusterMode`：是否为集群模式 true-是 false-否
 
-请求接口：`http://localhost:9010/api/v1/user/getUser?name=x`
+请求接口：`http://localhost:9010/api/v1/userVo/getUser?name=x`
 
 **测试结果**：
-- 规则配置在`/api/v1/user/getUser`接口上，请求超过设定的阈值，就会返回`Blocked by Sentinel (flow limiting)`
+- 规则配置在`/api/v1/userVo/getUser`接口上，请求超过设定的阈值，就会返回`Blocked by Sentinel (flow limiting)`
 - 规则配置在`getUser`接口上，请求超过设定的阈值，就会返回`限流/熔断业务处理-x`，进入限流处理业务，这里的`getUser`是注解`@SentinelResource`上的`value`值，该值一定要唯一
 
 ### 2、熔断测试

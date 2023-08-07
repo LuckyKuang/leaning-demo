@@ -5,7 +5,7 @@ spring:
     name: openfeign-client
   cloud:
     consul:
-      host: 1.12.248.106 # 这里是consul服务端的地址
+      host: 192.168.1.100 # 这里是consul服务端的地址
       port: 8500 # 这是consul服务端的端口
       discovery:
         health-check-timeout: 5s # 检测超时时间

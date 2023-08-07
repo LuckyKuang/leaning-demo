@@ -28,11 +28,8 @@
     <description>leaning-demo-parent-project</description>
 
     <modules>
+        <module>spring-boot</module>
         <module>spring-cloud</module>
-        <module>design-pattern</module>
-        <module>multi-thread</module>
-        <module>order-timeout-scheme</module>
-<!--        <module>spring-cloud/spring-cloud-alibaba-sentinel</module>-->
     </modules>
 
     <properties>

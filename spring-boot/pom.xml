@@ -21,17 +21,23 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.luckykuang</groupId>
-        <artifactId>spring-cloud-openfeign</artifactId>
+        <artifactId>leaning-demo</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>openfeign-server</artifactId>
+    <packaging>pom</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <name>spring-boot</name>
+    <description>spring-boot-parent-project</description>
+
+    <artifactId>spring-boot</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <modules>
+        <module>design-pattern</module>
+        <module>multi-thread</module>
+        <module>order-timeout-scheme</module>
+    </modules>
 
     <build>
         <plugins>
