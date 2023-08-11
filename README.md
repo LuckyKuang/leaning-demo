@@ -46,3 +46,5 @@ Eureka 2.0.0
 [3.Grpc服务调用案例](./spring-cloud/spring-cloud-grpc)
 
 [4.Sentinel限流/熔断案例](./spring-cloud/spring-cloud-alibaba-sentinel)
+
+[5.MQTT发布/订阅案例](./spring-cloud/spring-cloud-mqtt)

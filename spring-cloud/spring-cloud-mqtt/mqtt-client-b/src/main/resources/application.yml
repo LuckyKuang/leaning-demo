@@ -1,0 +1,39 @@
+server:
+  port: 9017
+
+spring:
+  application:
+    name: mqtt-publish-b
+  cloud:
+    consul:
+      host: 192.168.1.100 # 这里是consul服务端的地址
+      port: 8500 # 这是consul服务端的端口
+      discovery:
+        health-check-timeout: 5s # 检测超时时间
+        health-check-critical-timeout: 10s # 设置超时30秒之后，注销服务,这里数字要大于心跳检测的数字
+        heartbeat:
+          enabled: true
+          ttl: 5 # 这里开启心跳检测，设置10s提交一次心跳，用于consul与服务不在同一个网段的情况，支持存活检测
+        prefer-ip-address: true
+        instance-group: default # 设置实例所在组
+
+publish:
+  mqtt:
+    # MQTT-服务端地址
+    host: tcp://192.168.1.100:1883
+    # MQTT-服务端用户名
+    username: admin
+    # MQTT-服务端密码
+    password: public
+    # MQTT-是否清理session 持久化订阅(false) 非持久化订阅(true)
+    cleanSession: false
+    # MQTT-当前客户端的唯一标识
+    clientId: ${spring.application.name}
+    # 当前客户端的默认主题(大多数时候没什么用)
+    defaultTopic: test
+    # 发送超时时间
+    timeout: 1000
+    # 心跳时间
+    keepalive: 10
+    # 连接超时时间
+    connectionTimeout: 3000

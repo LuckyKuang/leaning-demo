@@ -80,6 +80,7 @@
                 </executions>
             </plugin>
             <!-- 升级SpringBoot3.x后，将javax修改成jakarta -->
+            <!-- https://github.com/floverfelt/find-and-replace-maven-plugin -->
             <plugin>
                 <groupId>io.github.floverfelt</groupId>
                 <artifactId>find-and-replace-maven-plugin</artifactId>
