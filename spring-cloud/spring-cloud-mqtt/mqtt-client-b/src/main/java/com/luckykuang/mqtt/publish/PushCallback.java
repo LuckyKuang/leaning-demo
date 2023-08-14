@@ -19,7 +19,7 @@ package com.luckykuang.mqtt.publish;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.nio.charset.StandardCharsets;
@@ -27,12 +27,16 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 消息回调
+ * connectionLost() 连接断开回调方法：实现于 MqttCallback 接口，在客户端连接断开时触发
+ * messageArrived() 消息送达回调方法：实现于 MqttCallback 接口，在客户端收到订阅的消息时触发
+ * deliveryComplete() 传送成功回调方法：实现于 MqttCallback 接口，在客户端发送消息至服务器成功时触发
+ * connectComplete() 连接成功回调方法：实现于 MqttCallbackExtended接口，MqttCallbackExtended接口继承 MqttCallback 接口，在客户端与服务器连接成功时触发
  * @author luckykuang
  * @date 2023/8/9 17:48
  */
 @Slf4j
 @RequiredArgsConstructor
-public class PushCallback implements MqttCallback {
+public class PushCallback implements MqttCallbackExtended {
 
     private final MqttPublish mqttPublish;
 
@@ -80,5 +84,15 @@ public class PushCallback implements MqttCallback {
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
         log.info("---------------------交付完成 complete:{},messageId:{}",token.isComplete(),token.getMessageId());
+    }
+
+    /**
+     * 客户端与服务器连接成功时触发
+     * @param reconnect If true, the connection was the result of automatic reconnect.
+     * @param serverURI The server URI that the connection was made to.
+     */
+    @Override
+    public void connectComplete(boolean reconnect, String serverURI) {
+        log.info("---------------------连接完成 reconnect:{},serverURI:{}",reconnect,serverURI);
     }
 }
