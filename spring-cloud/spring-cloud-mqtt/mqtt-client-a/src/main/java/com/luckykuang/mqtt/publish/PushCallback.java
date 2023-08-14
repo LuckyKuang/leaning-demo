@@ -44,11 +44,11 @@ public class PushCallback implements MqttCallback {
     public void connectionLost(Throwable throwable) {
         // 连接丢失后，一般在这里面进行重连
         log.warn("---------------------mqtt连接断开，尝试重连：{}",throwable.getMessage());
-        mqttPublish.subscribeConnect();
-        log.info("---------------------mqtt尝试重连成功");
-        for (int i = 0; i < 5; i++) {
+        while (true) {
             try {
-                TimeUnit.SECONDS.sleep(10);
+                TimeUnit.SECONDS.sleep(30);
+                mqttPublish.subscribeConnect();
+                log.info("---------------------mqtt尝试重连成功");
                 break;
             }catch (Exception e){
                 log.error("mqtt连接重试异常：",e);
