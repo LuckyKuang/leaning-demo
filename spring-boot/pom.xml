@@ -37,6 +37,7 @@
         <module>design-pattern</module>
         <module>multi-thread</module>
         <module>order-timeout-scheme</module>
+        <module>mongodb</module>
     </modules>
 
     <build>
