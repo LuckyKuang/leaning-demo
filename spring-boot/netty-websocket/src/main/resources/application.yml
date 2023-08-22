@@ -1,0 +1,34 @@
+netty:
+  websocket:
+    # Websocket服务端口
+    port: 1024
+    # 绑定的网卡
+    ip: 0.0.0.0
+    # URI路径
+    path: /channel
+    # 允许在web套接字帧的保留位中使用扩展
+    allow-extensions: true
+    # 消息帧最大体积
+    max-frame-size: 10240
+    # 握手时间超时设置(毫秒)
+    handshake-timeout-millis: 5000
+
+server:
+  port: 9021
+
+spring:
+  application:
+    name: netty-websocket
+
+logging:
+  level:
+    root: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
