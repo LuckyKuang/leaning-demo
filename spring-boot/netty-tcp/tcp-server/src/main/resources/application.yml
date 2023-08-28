@@ -1,0 +1,19 @@
+netty:
+  tcp:
+    server:
+      # tcp server端口
+      port: 3000
+      # 通道没接收消息，默认0禁用
+      readerIdleTime: 15
+      # 通道没发送消息，默认0禁用
+      writerIdleTime: 0
+      # 通道没有接收/发送消息，默认0禁用
+      allIdleTime: 0
+
+spring:
+  application:
+    name: tcp-server
+
+logging:
+  level:
+    root: INFO

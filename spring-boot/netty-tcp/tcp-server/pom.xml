@@ -21,26 +21,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.luckykuang</groupId>
-        <artifactId>leaning-demo</artifactId>
+        <artifactId>netty-tcp</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <packaging>pom</packaging>
+    <artifactId>tcp-server</artifactId>
 
-    <name>spring-boot</name>
-    <description>spring-boot-parent-project</description>
-
-    <artifactId>spring-boot</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-
-    <modules>
-        <module>design-pattern</module>
-        <module>multi-thread</module>
-        <module>order-timeout-scheme</module>
-        <module>mongodb</module>
-        <module>netty-websocket</module>
-        <module>netty-tcp</module>
-    </modules>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <build>
         <plugins>

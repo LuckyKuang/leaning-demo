@@ -21,26 +21,50 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.luckykuang</groupId>
-        <artifactId>leaning-demo</artifactId>
+        <artifactId>spring-boot</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <artifactId>netty-tcp</artifactId>
     <packaging>pom</packaging>
-
-    <name>spring-boot</name>
-    <description>spring-boot-parent-project</description>
-
-    <artifactId>spring-boot</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-
     <modules>
-        <module>design-pattern</module>
-        <module>multi-thread</module>
-        <module>order-timeout-scheme</module>
-        <module>mongodb</module>
-        <module>netty-websocket</module>
-        <module>netty-tcp</module>
+        <module>tcp-server</module>
+        <module>tcp-client</module>
     </modules>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
