@@ -1,0 +1,7 @@
+server:
+  port: 9023
+spring:
+  application:
+    name: jakarta-websocket-client
+websocket:
+  topic: topic

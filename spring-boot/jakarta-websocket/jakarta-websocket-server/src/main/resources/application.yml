@@ -1,0 +1,5 @@
+server:
+  port: 9022
+spring:
+  application:
+    name: jakarta-websocket-server
