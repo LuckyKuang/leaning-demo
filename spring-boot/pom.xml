@@ -34,14 +34,57 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <modules>
-        <module>design-pattern</module>
-        <module>multi-thread</module>
-        <module>order-timeout-scheme</module>
-        <module>mongodb</module>
-        <module>netty-websocket</module>
-        <module>netty-tcp</module>
-        <module>jakarta-websocket</module>
+        <module>spring-boot-design-pattern</module>
+        <module>spring-boot-easyexcel</module>
+        <module>spring-boot-order-timeout</module>
+        <module>spring-boot-mongodb</module>
+        <module>spring-boot-netty-websocket</module>
+        <module>spring-boot-netty-tcp</module>
+        <module>spring-boot-jakarta-websocket</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.1.1-jre</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

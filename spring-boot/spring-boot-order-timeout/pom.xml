@@ -22,58 +22,43 @@
 
     <parent>
         <groupId>com.luckykuang</groupId>
-        <artifactId>leaning-demo</artifactId>
+        <artifactId>spring-boot</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <packaging>pom</packaging>
+    <artifactId>spring-boot-order-timeout</artifactId>
 
-    <name>spring-cloud</name>
-    <description>spring-cloud-parent-project</description>
-
-    <artifactId>spring-cloud</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-
-    <modules>
-        <module>spring-cloud-common</module>
-        <module>spring-cloud-gateway</module>
-        <module>spring-cloud-openfeign</module>
-        <module>spring-cloud-grpc</module>
-        <module>spring-cloud-alibaba-sentinel</module>
-        <module>spring-cloud-mqtt</module>
-    </modules>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
-
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-quartz -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+            <version>2.2.2</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.3.0</version>
         </dependency>
 
-        <!-- 解决Spring Cloud LoadBalancer警告日志 start-->
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-            <version>2.9.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>
-        <!-- 解决Spring Cloud LoadBalancer警告日志 end-->
     </dependencies>
 
     <build>
