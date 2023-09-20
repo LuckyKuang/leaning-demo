@@ -47,6 +47,8 @@ Eureka 2.0.0
 
 [4.MongoDB集成案例](./spring-boot/spring-boot-mongodb)
 
+[5.串口(Serial Port)集成案例](./spring-boot/spring-boot-serial-port)
+
 ### 微服务
 
 [1.Gateway网关案例](./spring-cloud/spring-cloud-gateway)

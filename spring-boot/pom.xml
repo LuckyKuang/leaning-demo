@@ -41,6 +41,9 @@
         <module>spring-boot-netty-websocket</module>
         <module>spring-boot-netty-tcp</module>
         <module>spring-boot-jakarta-websocket</module>
+<!--        <module>spring-boot-rabbitmq</module>-->
+<!--        <module>spring-boot-file</module>-->
+        <module>spring-boot-serial-port</module>
     </modules>
 
     <dependencies>
@@ -72,10 +75,27 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>32.1.1-jre</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
         </dependency>
 
 
