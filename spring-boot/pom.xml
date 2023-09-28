@@ -41,9 +41,10 @@
         <module>spring-boot-netty-websocket</module>
         <module>spring-boot-netty-tcp</module>
         <module>spring-boot-jakarta-websocket</module>
-<!--        <module>spring-boot-rabbitmq</module>-->
-<!--        <module>spring-boot-file</module>-->
+        <module>spring-boot-rabbitmq</module>
+        <module>spring-boot-file</module>
         <module>spring-boot-serial-port</module>
+        <module>spring-boot-ping-ip</module>
     </modules>
 
     <dependencies>
@@ -98,6 +99,10 @@
             <version>2.10.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

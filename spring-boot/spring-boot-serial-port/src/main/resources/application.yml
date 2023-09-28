@@ -1,0 +1,5 @@
+server:
+  port: 9007
+spring:
+  application:
+    name: serial-port

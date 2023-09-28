@@ -49,6 +49,10 @@ Eureka 2.0.0
 
 [5.串口(Serial Port)集成案例](./spring-boot/spring-boot-serial-port)
 
+[6.RabbitMQ集成案例](./spring-boot/spring-boot-rabbitmq)
+
+[7.基于TCP实现机器发现/UDP实现机器广播案例](./spring-boot/spring-boot-ping-ip)
+
 ### 微服务
 
 [1.Gateway网关案例](./spring-cloud/spring-cloud-gateway)
@@ -80,4 +84,7 @@ Eureka 2.0.0
 9017	mqtt-publish-b
 9002	openfeign-client
 9001	openfeign-server
+9006    rabbitmq
+9007    serial-port
+9008    ping-ip
 ```
