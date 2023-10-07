@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -57,12 +58,12 @@ public class PingIpServiceImpl implements PingIpService {
     public List<Map<String,String>> startUdpSend(UdpSendVO vo) {
         List<Map<String,String>> respList = new ArrayList<>();
         Integer type = vo.getType();
-        if (StringUtils.isBlank(vo.getIpPrefix())){
-            // 获取所有网卡的IP地址前缀
-            List<String> localAddressList = IpUtils.getLocalAddressPrefixList();
+        if (StringUtils.isBlank(vo.getAddress())){
+            // 获取所有网卡的IP地址
+            List<String> localAddressList = getLocalAddressList(type);
             for (String localAddr : localAddressList) {
                 // 设置IP前缀
-                vo.setIpPrefix(localAddr);
+                vo.setAddress(localAddr);
                 respList.add(startSendAddress(vo, type));
             }
         } else {
@@ -84,12 +85,28 @@ public class PingIpServiceImpl implements PingIpService {
     private Map<String,String> startSendAddress(UdpSendVO vo, Integer type) {
         return switch (type) {
             // 单播
-            case 1 -> UdpSendUtils.unicast(vo.getIpPrefix(), vo.getPort(), vo.getData());
+            case 1 -> UdpSendUtils.unicast(vo.getAddress(), vo.getPort(), vo.getData());
             // 广播
-            case 2 -> UdpSendUtils.broadcast(vo.getIpPrefix(), vo.getPort(), vo.getData());
+            case 2 -> UdpSendUtils.broadcast(vo.getAddress(), vo.getPort(), vo.getData());
             // 组播
-            case 3 -> UdpSendUtils.multicast(vo.getIpPrefix(), vo.getPort(), vo.getData());
+            case 3 -> UdpSendUtils.multicast(vo.getAddress(), vo.getPort(), vo.getData());
             default -> null;
         };
+    }
+
+    private List<String> getLocalAddressList(Integer type){
+        switch (type) {
+            // 单播
+            case 1 -> {
+                return IpUtils.getLocalUnicastAddressList();
+            }
+            // 广播
+            case 2 -> {
+                return IpUtils.getLocalBroadcastAddressList();
+            }
+            default -> {
+                return Collections.emptyList();
+            }
+        }
     }
 }

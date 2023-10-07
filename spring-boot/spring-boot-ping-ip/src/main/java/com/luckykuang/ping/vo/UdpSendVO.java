@@ -26,10 +26,11 @@ import lombok.Data;
 @Data
 public class UdpSendVO {
     /**
-     * IP地址前缀 如：192.168.1
-     * 类型为组播时，此字段填充组播地址 如：224.0.0.1
+     * 单播：192.168.1.100
+     * 广播：192.168.1.255
+     * 组播：224.0.0.1
      */
-    private String ipPrefix;
+    private String address;
     /**
      * 端口号
      */

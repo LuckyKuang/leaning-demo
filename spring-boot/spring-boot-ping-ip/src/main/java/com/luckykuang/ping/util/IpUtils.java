@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -67,7 +68,67 @@ public final class IpUtils {
                 }
             }
         } catch (Exception e){
-            log.error("getLocalAddressList exception",e);
+            log.error("getLocalAddressPrefixList exception",e);
+        }
+        return resultAddress;
+    }
+
+    /**
+     * 获取所有的单播IP地址 如：192.168.1.100
+     */
+    public static List<String> getLocalUnicastAddressList(){
+        List<String> resultAddress = new ArrayList<>();
+        try {
+            // 获得本机的所有网络接口
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                if (networkInterface.isLoopback()){
+                    // 过滤回环地址
+                    continue;
+                }
+                // 获得与该网络接口绑定的 IP 地址，一般只有一个
+                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = addresses.nextElement();
+                    if (address instanceof Inet4Address inet4Address) {
+                        // 只关心 IPv4 地址
+                        resultAddress.add(inet4Address.getHostAddress());
+                    }
+                }
+            }
+        } catch (Exception e){
+            log.error("getLocalUnicastAddressList exception",e);
+        }
+        return resultAddress;
+    }
+
+    /**
+     * 获取所有的广播IP地址 如：192.168.1.255
+     */
+    public static List<String> getLocalBroadcastAddressList(){
+        List<String> resultAddress = new ArrayList<>();
+        try {
+            // 获得本机的所有网络接口
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                if (networkInterface.isLoopback()){
+                    // 过滤回环地址
+                    continue;
+                }
+                // 获得与该网络接口绑定的 IP 地址，一般只有一个
+                List<InterfaceAddress> interfaceAddresses = networkInterface.getInterfaceAddresses();
+                for (InterfaceAddress interfaceAddress : interfaceAddresses) {
+                    InetAddress address = interfaceAddress.getBroadcast();
+                    if (address instanceof Inet4Address inet4Broadcast) {
+                        // 只关心 IPv4 地址
+                        resultAddress.add(inet4Broadcast.getHostAddress());
+                    }
+                }
+            }
+        } catch (Exception e){
+            log.error("getLocalBroadcastAddressList exception",e);
         }
         return resultAddress;
     }

@@ -39,22 +39,22 @@ public final class UdpSendUtils {
 
     /**
      * 单播
-     * @param ipPrefix  IP地址前缀 如：192.168.1
+     * @param address   IP地址 如：192.168.1.100
      * @param port      端口号
      * @param data      需要发送的数据
      */
-    public static Map<String,String> unicast(String ipPrefix, int port, String data){
-        return sendRequest(ipPrefix,port,false,data);
+    public static Map<String,String> unicast(String address, int port, String data){
+        return sendRequest(address,port,false,data);
     }
 
     /**
      * 广播
-     * @param ipPrefix  IP地址前缀 如：192.168.1
+     * @param address   IP地址 如：192.168.1.100
      * @param port      端口号
      * @param data      需要发送的数据
      */
-    public static Map<String,String> broadcast(String ipPrefix, int port, String data){
-        return sendRequest(ipPrefix,port,true,data);
+    public static Map<String,String> broadcast(String address, int port, String data){
+        return sendRequest(address,port,true,data);
     }
 
     /**
@@ -69,13 +69,12 @@ public final class UdpSendUtils {
 
     /**
      * 发送广播/单播
-     * @param ipPrefix  IP地址前缀 如：192.168.1
+     * @param address   IP地址 如：192.168.1.100
      * @param port      端口号
      * @param broadcast true-广播 false-单播
      * @param data      需要发送的数据
      */
-    private static Map<String,String> sendRequest(String ipPrefix, int port, boolean broadcast, String data) {
-        String ipAddress = null;
+    private static Map<String,String> sendRequest(String address, int port, boolean broadcast, String data) {
         String responseMessage = null;
         Map<String,String> resultMap = new HashMap<>();
         try (DatagramSocket socket = new DatagramSocket()) {
@@ -83,18 +82,9 @@ public final class UdpSendUtils {
             socket.setSoTimeout(TIMEOUT);
             // 需要发送的数据
             byte[] requestData = data.getBytes();
-            InetAddress destinationAddress;
-            // 广播
-            if (broadcast) {
-                ipAddress = ipPrefix + ".255";
-                destinationAddress = InetAddress.getByName(ipAddress);
-                socket.setBroadcast(true);
-            }
-            // 单播
-            else {
-                ipAddress = ipPrefix + ".1";
-                destinationAddress = InetAddress.getByName(ipAddress);
-            }
+            InetAddress destinationAddress = InetAddress.getByName(address);
+            // true-广播 false-单播
+            socket.setBroadcast(broadcast);
             // 封装广播/单播数据
             DatagramPacket requestPacket = new DatagramPacket(requestData, requestData.length, destinationAddress, port);
             // 发送数据
@@ -115,7 +105,7 @@ public final class UdpSendUtils {
         } catch (IOException e) {
             log.warn("udp广播/单播异常",e);
         }
-        resultMap.put("address",ipAddress);
+        resultMap.put("address",address);
         resultMap.put("respMsg",responseMessage);
         return resultMap;
     }
