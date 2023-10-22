@@ -7,6 +7,12 @@ spring:
 
 rocketmq:
   name-server: 192.168.1.100:9876
+  enhance:
+    # 启动隔离，用于激活配置类EnvironmentIsolationConfig
+    # 启动后会自动在topic上拼接激活的配置文件，达到自动隔离的效果
+    enabledIsolation: true
+    # 隔离环境名称(dev、test、prod)，拼接到topic后，topic_dev，默认空字符串
+    environment: dev
   producer:
     # 发送同一类消息的设置为同一个group，保证唯一
     group: springboot_producer_group
@@ -26,3 +32,10 @@ rocketmq:
     group: springboot_consumer_group
     # 一次拉取消息最大值，注意是拉取消息的最大值而非消费最大值
     pull-batch-size: 10
+
+logging:
+  level:
+    # 屏蔽控制台broker信息
+    RocketmqClient: ERROR
+    io:
+      netty: ERROR

@@ -36,7 +36,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -71,7 +70,7 @@ public class RocketMqInit implements ApplicationListener<ApplicationReadyEvent> 
      */
     public static final Map<String, DefaultMQProducer> PRODUCER_CACHE = new ConcurrentHashMap<>();
 
-    private static final List<DefaultMQPushConsumer> startConsumer = new ArrayList<>();
+//    private static final List<DefaultMQPushConsumer> startConsumer = new ArrayList<>();
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -174,7 +173,7 @@ public class RocketMqInit implements ApplicationListener<ApplicationReadyEvent> 
                     defaultMQPushConsumer.subscribe(topic.getTopicName(), StringUtils.isBlank(topic.getTagName()) ? "*" : topic.getTagName());
                 }
                 defaultMQPushConsumer.start();
-                startConsumer.add(defaultMQPushConsumer);
+//                startConsumer.add(defaultMQPushConsumer);
                 log.info("MQ消费者group:{},nameServer:{}启动成功", consumer.getGroupName(), consumer.getNameServer());
             } catch (MQClientException e) {
                 log.error("MQ消费者group:{},nameServer:{},启动失败",consumer.getGroupName(), consumer.getNameServer(), e);
