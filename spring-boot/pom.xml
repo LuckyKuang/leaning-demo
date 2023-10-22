@@ -45,6 +45,8 @@
         <module>spring-boot-file</module>
         <module>spring-boot-serial-port</module>
         <module>spring-boot-ping-ip</module>
+        <module>spring-boot-multi-rocketmq</module>
+        <module>spring-boot-rocketmq</module>
     </modules>
 
     <dependencies>

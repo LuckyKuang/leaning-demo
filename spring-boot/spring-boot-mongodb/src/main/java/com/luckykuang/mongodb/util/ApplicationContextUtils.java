@@ -16,46 +16,44 @@
 
 package com.luckykuang.mongodb.util;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 /**
  * spring bean 工具类
  * @author luckykuang
  * @date 2023/4/21 17:05
  */
-@Component
-public class ApplicationContextUtils implements ApplicationContextAware {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ApplicationContextUtils implements ApplicationContextAware {
 
+    // 获取applicationContext
     private static ApplicationContext applicationContext;
 
     @Override
-    public void setApplicationContext(@NotNull ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (ApplicationContextUtils.applicationContext == null){
             ApplicationContextUtils.applicationContext = applicationContext;
         }
     }
 
-    // 获取applicationContext
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
     // 通过name获取Bean
     public static Object getBean(String name){
-        return getApplicationContext().getBean(name);
+        return applicationContext.getBean(name);
     }
 
     // 通过class获取Bean
     public static <T> T getBean(Class<T> clazz){
-        return getApplicationContext().getBean(clazz);
+        return applicationContext.getBean(clazz);
     }
 
     // 通过name和Clazz返回指定的Bean
     public static <T> T getBean(String name,Class<T> clazz){
-        return getApplicationContext().getBean(name, clazz);
+        return applicationContext.getBean(name, clazz);
     }
 }

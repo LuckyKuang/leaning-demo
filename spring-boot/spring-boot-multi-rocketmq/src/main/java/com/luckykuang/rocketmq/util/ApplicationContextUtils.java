@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.luckykuang.netty.util;
+package com.luckykuang.rocketmq.util;
 
 import lombok.AccessLevel;
 import lombok.Getter;
