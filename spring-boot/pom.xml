@@ -47,6 +47,8 @@
         <module>spring-boot-ping-ip</module>
         <module>spring-boot-multi-rocketmq</module>
         <module>spring-boot-rocketmq</module>
+        <module>spring-boot-statemachine</module>
+        <module>spring-boot-netty-mqtt</module>
     </modules>
 
     <dependencies>
@@ -75,6 +77,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.14.0</version>
         </dependency>
 
         <dependency>

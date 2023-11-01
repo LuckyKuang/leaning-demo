@@ -23,6 +23,8 @@ Eureka 2.0.0
 
 [3.策略模式案例](./spring-boot/spring-boot-design-pattern/strategy-pattern)
 
+[4.适配器模式案例](./spring-boot/spring-boot-design-pattern/adapter-pattern)
+
 ### 二、多线程
 
 [基于多线程的Excel导入/导出案例](./spring-boot/spring-boot-easyexcel)
@@ -87,4 +89,7 @@ Eureka 2.0.0
 9006    rabbitmq
 9007    serial-port
 9008    ping-ip
+9013    statemachine
+9014    file
+9024    netty-mqtt
 ```

@@ -16,23 +16,22 @@
 
 package com.luckykuang.rocketmq.util;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 /**
  * spring bean 工具类
  * @author luckykuang
  * @date 2023/4/21 17:05
  */
-@Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ApplicationContextUtils implements ApplicationContextAware {
+@Component
+public class ApplicationContextUtils implements ApplicationContextAware {
 
     // 获取applicationContext
+    @Getter
     private static ApplicationContext applicationContext;
 
     @Override

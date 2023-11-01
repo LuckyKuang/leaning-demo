@@ -34,6 +34,7 @@
         <module>strategy-pattern</module>
         <module>singleton-pattern</module>
         <module>chain-of-responsibility-pattern</module>
+        <module>adapter-pattern</module>
     </modules>
 
     <build>

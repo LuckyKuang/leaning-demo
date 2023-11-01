@@ -1,0 +1,19 @@
+server:
+  # web server 对外端口
+  port: 9025
+spring:
+  application:
+    name: netty-mqtt
+mqtt:
+  # netty server 对外端口
+  serverPort: 9024
+  username: admin
+  password: public
+  readerIdleTime: 0
+  writerIdleTime: 0
+  # 读写心跳检测 30秒 客户端连接此服务端需要将客户端心跳设置为 10秒
+  allIdleTime: 30
+  tcpNodeLay: true
+  backLog: 128
+  keepAlive: true
+  logLevel: INFO
