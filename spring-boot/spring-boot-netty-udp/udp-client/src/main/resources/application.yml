@@ -1,0 +1,7 @@
+server:
+  port: 9027
+spring:
+  application:
+    name: udp-client
+udp:
+  clientPort: 9028

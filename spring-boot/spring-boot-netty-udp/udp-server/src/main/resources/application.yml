@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: udp-server
+udp:
+  serverPort: 9029

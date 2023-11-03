@@ -92,4 +92,8 @@ Eureka 2.0.0
 9013    statemachine
 9014    file
 9024    netty-mqtt
+9025    netty-mqtt web
+9026    netty-udp-client
+9027    netty-udp-client web
+9028    netty-udp-server
 ```

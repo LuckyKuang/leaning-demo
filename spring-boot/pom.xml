@@ -49,6 +49,7 @@
         <module>spring-boot-rocketmq</module>
         <module>spring-boot-statemachine</module>
         <module>spring-boot-netty-mqtt</module>
+        <module>spring-boot-netty-udp</module>
     </modules>
 
     <dependencies>
