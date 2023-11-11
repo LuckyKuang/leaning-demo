@@ -36,7 +36,7 @@ class FileWriterUtilsTest {
     // 获取默认定位到的当前用户目录("user.dir"),也就是当前应用的根路径
     private static final String tempDir = System.getProperty("user.dir");
     private static final String fromData = "1234567890，。；：,.;:中文";
-    private static final File toFile = new File(tempDir + "\\test.txt");
+    private static final File toFile = new File(tempDir + File.separator + "test.txt");
 
     @BeforeEach
     void setUp() throws IOException {

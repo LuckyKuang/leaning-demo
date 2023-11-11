@@ -35,9 +35,9 @@ class FileCopyUtilsTest {
 
     // 获取默认定位到的当前用户目录("user.dir"),也就是当前应用的根路径
     private static final String tempDir = System.getProperty("user.dir");
-    private static final File fromImage = new File(tempDir + "\\images\\Gaara.jpg");
-    private static final File fromFile = new File(tempDir + "\\test.txt");
-    private static final File toFile = new File(tempDir + "\\test-temp.txt");
+    private static final File fromImage = new File(tempDir + File.separator + "images" + File.separator + "Gaara.jpg");
+    private static final File fromFile = new File(tempDir + File.separator + "test.txt");
+    private static final File toFile = new File(tempDir + File.separator + "test-temp.txt");
 
     @BeforeEach
     void setUp() throws IOException {
