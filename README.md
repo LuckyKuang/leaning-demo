@@ -1,6 +1,6 @@
 # leaning-demo
 
-研究新技术、记录新想法
+> 研究新技术、记录新想法
 
 ```shell
 # 主要框架
@@ -17,57 +17,100 @@ Eureka 2.0.0
 
 ### 一、设计模式
 
-[1.单例模式案例](./spring-boot/spring-boot-design-pattern/singleton-pattern)
+- [1.单例模式案例](./spring-boot/spring-boot-design-pattern/singleton-pattern)
 
-[2.责任链模式案例](./spring-boot/spring-boot-design-pattern/chain-of-responsibility-pattern)
+- [2.责任链模式案例](./spring-boot/spring-boot-design-pattern/chain-of-responsibility-pattern)
 
-[3.策略模式案例](./spring-boot/spring-boot-design-pattern/strategy-pattern)
+- [3.策略模式案例](./spring-boot/spring-boot-design-pattern/strategy-pattern)
 
-[4.适配器模式案例](./spring-boot/spring-boot-design-pattern/adapter-pattern)
+- [4.适配器模式案例](./spring-boot/spring-boot-design-pattern/adapter-pattern)
 
-### 二、多线程
+### 二、互联网相关
 
-[基于多线程的Excel导入/导出案例](./spring-boot/spring-boot-easyexcel)
+#### 不同方式实现订单超时案例
 
-### 三、订单超时取消处理案例
+- [1.JDK延迟队列DelayQueue](./spring-boot/spring-boot-order-timeout/src/main/java/com/luckykuang/order/delayed)
 
-[1.JDK延迟队列DelayQueue](./spring-boot/spring-boot-order-timeout/src/main/java/com/luckykuang/order/delayed)
+- [2.时间轮算法(netty的HashedWheelTimer)](./spring-boot/spring-boot-order-timeout/src/main/java/com/luckykuang/order/netty)
 
-[2.时间轮算法(netty的HashedWheelTimer)](./spring-boot/spring-boot-order-timeout/src/main/java/com/luckykuang/order/netty)
+- [3.定时轮询(quartz实现)](./spring-boot/spring-boot-order-timeout/src/main/java/com/luckykuang/order/quartz)
 
-[3.定时轮询(quartz实现)](./spring-boot/spring-boot-order-timeout/src/main/java/com/luckykuang/order/quartz)
+#### 基于EasyExcel实现Excel导入导出案例
 
-[4.RocketMQ消息队列](./spring-boot/spring-boot-order-timeout/src/main/java/com/luckykuang/order/rocketmq)
+- [基于多线程的Excel导入/导出案例](./spring-boot/spring-boot-easyexcel)
 
-### 集成案例
+#### 基于spring状态机实现订单状态的自动切换案例
 
-[1.基于Netty的websocket-server集成案例](./spring-boot/spring-boot-netty-websocket)
+- [基于spring状态机实现订单状态的自动切换案例](./spring-boot/spring-boot-statemachine)
 
-[2.基于Netty的tcp-server/tcp-client集成案例](./spring-boot/spring-boot-netty-tcp)
+#### 关于文件的零拷贝实现(有测试用例)
 
-[3.基于jakarta注解的websocket-server/websocket-client集成案例](./spring-boot/spring-boot-jakarta-websocket)
+- [1.二进制文件/普通文件的上传案例](./spring-boot/spring-boot-file)
 
-[4.MongoDB集成案例](./spring-boot/spring-boot-mongodb)
+- [2.图片与Base64互转测试用例](./spring-boot/spring-boot-file/src/test/java/com/luckykuang/file/util/FileConvertUtilsTest.java)
 
-[5.串口(Serial Port)集成案例](./spring-boot/spring-boot-serial-port)
+- [3.文件零拷贝测试用例](./spring-boot/spring-boot-file/src/test/java/com/luckykuang/file/util/FileCopyUtilsTest.java)
 
-[6.RabbitMQ集成案例](./spring-boot/spring-boot-rabbitmq)
+- [4.文件读写测试用例(推荐用字节读写)](./spring-boot/spring-boot-file/src/test/java/com/luckykuang/file/util/FileWriterUtilsTest.java)
 
-[7.基于TCP实现机器发现/UDP实现机器广播案例](./spring-boot/spring-boot-ping-ip)
 
-### 微服务
+### 三、物联网相关
 
-[1.Gateway网关案例](./spring-cloud/spring-cloud-gateway)
+#### Netty案例
 
-[2.Openfeign服务调用案例](./spring-cloud/spring-cloud-openfeign)
+- [1.基于Netty的websocket-server集成案例](./spring-boot/spring-boot-netty-websocket)
 
-[3.Grpc服务调用案例](./spring-cloud/spring-cloud-grpc)
+- [2.基于Netty的mqtt-server集成案例](./spring-boot/spring-boot-netty-mqtt)
 
-[4.Sentinel限流/熔断案例](./spring-cloud/spring-cloud-alibaba-sentinel)
+- [3.基于Netty的tcp-server/tcp-client集成案例](./spring-boot/spring-boot-netty-tcp)
 
-[5.MQTT发布/订阅案例](./spring-cloud/spring-cloud-mqtt)
+- [4.基于Netty的udp-server/udp-client集成案例](./spring-boot/spring-boot-netty-udp)
 
-### 端口维护
+#### 消息队列案例
+
+- [1.RabbitMQ集成案例](./spring-boot/spring-boot-rabbitmq)
+
+- [2.RocketMQ集成案例](./spring-boot/spring-boot-rocketmq)
+
+- [3.支持多消费者RocketMQ集成案例](./spring-boot/spring-boot-multi-rocketmq)
+
+#### 数据库案例
+
+- [1.MongoDB集成案例](./spring-boot/spring-boot-mongodb)
+
+#### 对接硬件相关案例
+
+- [1.基于jakarta注解的websocket-server/websocket-client集成案例](./spring-boot/spring-boot-jakarta-websocket)
+
+- [2.基于jSerialComm实现串口通信集成案例](./spring-boot/spring-boot-serial-port)
+
+- [3.基于TCP实现机器主动发现/基于UDP广播实现被动机器发现案例](./spring-boot/spring-boot-ping-ip)
+
+### 四、微服务相关
+
+- [1.Gateway网关案例](./spring-cloud/spring-cloud-gateway)
+
+- [2.Openfeign服务调用案例](./spring-cloud/spring-cloud-openfeign)
+
+- [3.Grpc服务调用案例](./spring-cloud/spring-cloud-grpc)
+
+- [4.Sentinel限流/熔断案例](./spring-cloud/spring-cloud-alibaba-sentinel)
+
+- [5.MQTT发布/订阅案例](./spring-cloud/spring-cloud-mqtt)
+
+## 本项目启动步骤
+
+1. 必须安装jdk17+版本，因为代码中用到了新特性
+2. 推荐使用IntelliJ IDEA工具，因为简单易用
+3. Maven用IntelliJ IDEA自带的就行，它会根据你的项目自动适配最合适的版本
+4. File -> Project Structure -> Project,在这里将SDK选择17，再将Language level选择17，最后点击OK
+5. File -> Setting -> Build,Execution,Deployment -> Build Tools -> Maven -> Importing,在这里将JDK for importer设置为17，最后点击OK
+6. File -> Setting -> Build,Execution,Deployment -> Build Tools -> Maven -> Runner,在这里将JRE设置为17，最后点击OK
+7. 到这里设置一切就绪，最后只需要刷新一下Maven后，等着将依赖下载完成，项目即可正常运行
+
+注意：Maven千万别修改成国内镜像，能科学就科学，不能科学就乖乖等。很多依赖国内镜像没有，别自找麻烦哈
+
+## 端口维护
 ```text
 9012	chain-of-responsibility-pattern
 9005	strategy-pattern

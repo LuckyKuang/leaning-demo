@@ -146,7 +146,10 @@ class FileCopyUtilsTest {
         assertEquals(file1,file2);
     }
 
-//    @Test
+    /**
+     * 此方法在Windows下会有文件残留，MacOS下没发现有文件残留
+     */
+    //    @Test
 //    void fileCopyWithMappedByteBuffer() throws IOException {
 //        long start = System.currentTimeMillis();
 //        FileCopyUtils.fileCopyWithMappedByteBuffer(fromFile,toFile);
