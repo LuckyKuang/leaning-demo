@@ -24,8 +24,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2023/7/4 14:32
  */
 @SpringBootApplication
-public class ThreadApplication {
+public class ExcelApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ThreadApplication.class,args);
+        SpringApplication.run(ExcelApplication.class,args);
     }
 }

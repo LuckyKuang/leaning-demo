@@ -16,6 +16,7 @@
 
 package com.luckykuang.thread.controller;
 
+import com.luckykuang.thread.aspect.MarkLog;
 import com.luckykuang.thread.entity.Order;
 import com.luckykuang.thread.entity.User;
 import com.luckykuang.thread.service.OrderService;
@@ -44,6 +45,7 @@ public class ExcelController {
      * 用户信息导出
      * @param response 响应对象
      */
+    @MarkLog(desc = "用户信息导出")
     @GetMapping("/export/user")
     public void exportUserExcel(HttpServletResponse response) {
         userService.exportUserExcel(response);
@@ -55,8 +57,9 @@ public class ExcelController {
      * @param file 导入文件 - 此处没有对导入文件做校验
      * @return 导入的用户信息
      */
+    @MarkLog(desc = "用户信息导入")
     @PostMapping("/import/user")
-    public ResponseEntity<List<User>> importUserExcel(@RequestPart(value = "file") MultipartFile file) {
+        public ResponseEntity<List<User>> importUserExcel(@RequestPart(value = "file") MultipartFile file) {
         return userService.importUserExcel(file);
     }
 
@@ -64,6 +67,7 @@ public class ExcelController {
      * 订单信息导出(复杂导出)
      * @param response 响应对象
      */
+    @MarkLog(desc = "订单信息导出(复杂导出)")
     @GetMapping("/export/order")
     public void exportOrderExcel(HttpServletResponse response) {
         orderService.exportOrderExcel(response);
@@ -75,8 +79,33 @@ public class ExcelController {
      * @param file 导入文件 - 此处没有对导入文件做校验
      * @return 导入的订单信息
      */
+    @MarkLog(desc = "订单信息导入(线程池导入)")
     @PostMapping("/import/order")
     public ResponseEntity<List<Order>> importOrderExcel(@RequestPart(value = "file") MultipartFile file) {
         return orderService.importOrderExcel(file);
+    }
+
+    @MarkLog(desc = "get请求")
+    @GetMapping("demo")
+    public ResponseEntity<String> demo(String name,Integer age){
+        return ResponseEntity.ok(name + age);
+    }
+
+    @MarkLog(desc = "post请求")
+    @PostMapping("demo2")
+    public ResponseEntity<User> demo2(@RequestBody User user){
+        return ResponseEntity.ok(user);
+    }
+
+    @MarkLog(desc = "put请求")
+    @PutMapping("demo3")
+    public ResponseEntity<User> demo3(@RequestBody User user){
+        return ResponseEntity.ok(user);
+    }
+
+    @MarkLog(desc = "delete请求")
+    @DeleteMapping("demo4/{id}")
+    public ResponseEntity<Integer> demo4(@PathVariable Integer id){
+        return ResponseEntity.ok(id);
     }
 }

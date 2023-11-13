@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.luckykuang.chain;
+package com.luckykuang.thread.aspect;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.lang.annotation.*;
 
 /**
- * 责任链模式
+ * 日志记录注解
  * @author luckykuang
- * @date 2023/7/21 9:33
+ * @date 2023/11/13 10:32
  */
-@SpringBootApplication
-public class ChainController {
-    public static void main(String[] args) {
-        SpringApplication.run(ChainController.class,args);
-    }
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface MarkLog {
+    String desc() default "";
 }

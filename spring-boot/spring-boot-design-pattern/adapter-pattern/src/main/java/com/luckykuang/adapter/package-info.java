@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package com.luckykuang.chain;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 /**
- * 责任链模式
+ * 适配器模式
  * @author luckykuang
- * @date 2023/7/21 9:33
+ * @date 2023/11/13 10:14
  */
-@SpringBootApplication
-public class ChainController {
-    public static void main(String[] args) {
-        SpringApplication.run(ChainController.class,args);
-    }
-}
+package com.luckykuang.adapter;

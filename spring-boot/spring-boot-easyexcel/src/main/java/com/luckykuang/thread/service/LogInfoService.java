@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package com.luckykuang.chain;
+package com.luckykuang.thread.service;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.luckykuang.thread.entity.LogInfo;
 
 /**
- * 责任链模式
  * @author luckykuang
- * @date 2023/7/21 9:33
+ * @date 2023/11/13 10:45
  */
-@SpringBootApplication
-public class ChainController {
-    public static void main(String[] args) {
-        SpringApplication.run(ChainController.class,args);
-    }
+public interface LogInfoService extends IService<LogInfo> {
 }

@@ -20,6 +20,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
+ * 策略模式
  * @author luckykuang
  * @date 2023/6/20 11:13
  */

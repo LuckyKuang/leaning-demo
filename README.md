@@ -37,7 +37,9 @@ Eureka 2.0.0
 
 #### 基于EasyExcel实现Excel导入导出案例
 
-- [基于多线程的Excel导入/导出案例](./spring-boot/spring-boot-easyexcel)
+- [1.基于多线程的Excel导入/导出案例](./spring-boot/spring-boot-easyexcel)
+
+- [2.基于SpringAOP实现日志记录案例](./spring-boot/spring-boot-easyexcel/src/main/java/com/luckykuang/thread/aspect/MarkLogAspect.java)
 
 #### 基于spring状态机实现订单状态的自动切换案例
 
