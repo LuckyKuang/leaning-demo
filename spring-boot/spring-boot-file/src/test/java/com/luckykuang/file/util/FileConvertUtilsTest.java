@@ -27,6 +27,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -72,6 +74,10 @@ class FileConvertUtilsTest {
         String base64Content = FileConvertUtils.imageToBase64(toImage.getPath());
         boolean verified = FileConvertUtils.verifyImage(toImage.getAbsolutePath(), base64Content);
         assertTrue(verified);
+
+        String base64Str = "data:image/png;base64," + base64Content;
+        String base64ToEmpty = replaceBase64ToEmpty(base64Str);
+        assertEquals("", base64ToEmpty);
     }
 
     @Test
@@ -84,5 +90,20 @@ class FileConvertUtilsTest {
         String img2 = new String(md5.digest(FileReadUtils.readFileBytesByDataInputStream(tempImage)));
 
         assertEquals(img1,img2);
+    }
+
+    /**
+     * 匹配上base64字符串，将其设置为空字符串
+     * @param base64Str base64字符串
+     * @return 空字符串
+     */
+    private static String replaceBase64ToEmpty(String base64Str) {
+        Pattern findData = Pattern.compile("(data:;base64,)*(.+)");
+        Matcher getData = findData.matcher(base64Str);
+        if(getData.matches()){
+            // 如果正则匹配上，说明字符串为base64字符串，将base64字符串设置为空
+            base64Str = "";
+        }
+        return base64Str;
     }
 }
