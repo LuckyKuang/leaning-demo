@@ -45,30 +45,30 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class TcpServerChannelUtils {
 
     // 管道组
-    private static final ChannelGroup GlobalGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    private static final ChannelGroup GLOBAL_GROUP = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     // 缓存管道id
-    private static final ConcurrentMap<String, ChannelId> ChannelMap = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, ChannelId> CHANNEL_MAP = new ConcurrentHashMap<>();
     // 客户端数量统计(减掉自身启动的客户端)
-    public static final AtomicInteger ClientConnect = new AtomicInteger(0);
+    public static final AtomicInteger CLIENT_CONNECT = new AtomicInteger(0);
 
     /**
      * 添加管道
      */
     public static void addChannel(Channel channel) {
-        GlobalGroup.add(channel);
-        ChannelMap.put(channel.id().asShortText(), channel.id());
-        ClientConnect.getAndIncrement();
-        log.info("当前已连接客户端数量：{}",ClientConnect.get());
+        GLOBAL_GROUP.add(channel);
+        CHANNEL_MAP.put(channel.id().asShortText(), channel.id());
+        CLIENT_CONNECT.getAndIncrement();
+        log.info("当前已连接客户端数量：{}", CLIENT_CONNECT.get());
     }
 
     /**
      * 删除管道
      */
     public static void removeChannel(Channel channel) {
-        GlobalGroup.remove(channel);
-        ChannelMap.remove(channel.id().asShortText());
-        ClientConnect.getAndDecrement();
-        log.info("当前已连接客户端数量：{}",ClientConnect.get());
+        GLOBAL_GROUP.remove(channel);
+        CHANNEL_MAP.remove(channel.id().asShortText());
+        CLIENT_CONNECT.getAndDecrement();
+        log.info("当前已连接客户端数量：{}", CLIENT_CONNECT.get());
     }
 
     /**
@@ -76,7 +76,7 @@ public final class TcpServerChannelUtils {
      * @param id 客户端管道id
      */
     public static Channel findChannel(String id) {
-        return GlobalGroup.find(ChannelMap.get(id));
+        return GLOBAL_GROUP.find(CHANNEL_MAP.get(id));
     }
 
     /**
@@ -84,8 +84,8 @@ public final class TcpServerChannelUtils {
      */
     public static List<Channel> findAllChannel() {
         List<Channel> channels = new ArrayList<>();
-        ChannelMap.forEach((key,value) -> {
-            Channel channel = GlobalGroup.find(ChannelMap.get(key));
+        CHANNEL_MAP.forEach((key, value) -> {
+            Channel channel = GLOBAL_GROUP.find(CHANNEL_MAP.get(key));
             channels.add(channel);
         });
         return channels;
@@ -97,11 +97,11 @@ public final class TcpServerChannelUtils {
      * @param tws 需要发送的消息
      */
     public static void sendMsgById(String id, TextWebSocketFrame tws) {
-        ChannelId channelId = ChannelMap.get(id);
+        ChannelId channelId = CHANNEL_MAP.get(id);
         if (channelId == null){
             return;
         }
-        Channel channel = GlobalGroup.find(channelId);
+        Channel channel = GLOBAL_GROUP.find(channelId);
         channel.writeAndFlush(tws);
     }
 
@@ -110,6 +110,6 @@ public final class TcpServerChannelUtils {
      * @param tws 需要发送的消息
      */
     public static void sendMsgToAll(TextWebSocketFrame tws) {
-        GlobalGroup.writeAndFlush(tws);
+        GLOBAL_GROUP.writeAndFlush(tws);
     }
 }

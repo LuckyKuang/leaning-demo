@@ -14,30 +14,18 @@
  * limitations under the License.
  */
 
-package com.luckykuang.tcp.util;
+package com.luckykuang.tcp.service;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-import java.util.Optional;
+import com.luckykuang.tcp.vo.ConnectVO;
+import com.luckykuang.tcp.vo.SendVO;
+import org.springframework.http.ResponseEntity;
 
 /**
  * @author luckykuang
- * @date 2023/8/25 18:38
+ * @date 2023/11/21 16:01
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class TcpClientUtils {
-    private static final ThreadLocal<Boolean> TCP_CONNECTED = new ThreadLocal<>();
+public interface TcpClientService {
+    ResponseEntity<String> connect(ConnectVO vo);
 
-    public static void setTcpConnected(boolean status){
-        TCP_CONNECTED.set(status);
-    }
-
-    public static Optional<Boolean> getTcpConnected(){
-        return Optional.ofNullable(TCP_CONNECTED.get());
-    }
-
-    public static void removeTcpConnected(){
-        TCP_CONNECTED.remove();
-    }
+    ResponseEntity<String> send(SendVO vo);
 }

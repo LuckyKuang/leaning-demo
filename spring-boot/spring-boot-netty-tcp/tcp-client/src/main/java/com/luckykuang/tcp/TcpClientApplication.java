@@ -17,19 +17,16 @@
 package com.luckykuang.tcp;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
+ * tcp client
  * @author luckykuang
  * @date 2023/8/28 15:33
  */
 @SpringBootApplication
 public class TcpClientApplication {
     public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(TcpClientApplication.class);
-        // 关闭web服务
-        application.setWebApplicationType(WebApplicationType.NONE);
-        application.run(args);
+        SpringApplication.run(TcpClientApplication.class,args);
     }
 }

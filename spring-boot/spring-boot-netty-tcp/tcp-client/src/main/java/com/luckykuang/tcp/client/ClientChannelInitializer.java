@@ -16,54 +16,68 @@
 
 package com.luckykuang.tcp.client;
 
-import io.netty.channel.Channel;
+import com.luckykuang.tcp.codec.TcpClientAsciiDecoder;
+import com.luckykuang.tcp.codec.TcpClientAsciiEncoder;
+import com.luckykuang.tcp.codec.TcpClientHexDecoder;
+import com.luckykuang.tcp.codec.TcpClientHexEncoder;
+import com.luckykuang.tcp.config.TcpClientConfig;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.util.CharsetUtil;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
+
+import static com.luckykuang.tcp.constant.Constants.*;
 
 /**
  * 初始化通道
  * @author luckykuang
  * @date 2023/8/24 16:50
  */
+@Slf4j
 @Component
 @ChannelHandler.Sharable
-public class ClientChannelInitializer extends ChannelInitializer<Channel> {
-
-    @Value("${netty.tcp.client.readerIdleTime}")
-    private long readerIdleTime;
-    @Value("${netty.tcp.client.writerIdleTime}")
-    private long writerIdleTime;
-    @Value("${netty.tcp.client.allIdleTime}")
-    private long allIdleTime;
+public class ClientChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     @Resource
-    private ClientChannelInboundHandlerAdapter clientChannelInboundHandlerAdapter;
+    private TcpClientConfig config;
 
+    public void setTcpCodec(String code){
+        TCP_CODEC.set(code);
+    }
+
+    /**
+     * ChannelPipeline管道底层是责任链模式，所以特别是编码解码部分顺序一定不要搞错
+     */
     @Override
-    protected void initChannel(Channel ch) {
+    protected void initChannel(SocketChannel ch) {
         ChannelPipeline pipeline = ch.pipeline();
-        // IdleStateHandler心跳机制,如果超时触发Handle中userEventTrigger()方法
-        pipeline.addLast("idleStateHandler",new IdleStateHandler(
-                readerIdleTime,
-                writerIdleTime,
-                allIdleTime,
-                TimeUnit.MINUTES));
+        // netty日志打印级别
+        pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
+        // 心跳机制,超时会触发Handle中userEventTrigger()方法
+        pipeline.addLast(new IdleStateHandler(config.getReaderIdleTime(),config.getWriterIdleTime(),
+                config.getAllIdleTime(),TimeUnit.MINUTES));
+        String tcpCodec = TCP_CODEC.get();
         // 字符串编解码器
-        pipeline.addLast(
-                new StringDecoder(CharsetUtil.UTF_8),
-                new StringEncoder(CharsetUtil.UTF_8)
-        );
+        if (StringUtils.isNotBlank(tcpCodec) && ASCII.equalsIgnoreCase(tcpCodec)){
+            // 十进制编码/解码
+            pipeline.addLast(new TcpClientAsciiEncoder(),new TcpClientAsciiDecoder());
+        } else if (StringUtils.isNotBlank(tcpCodec) && HEX.equalsIgnoreCase(tcpCodec)) {
+            // 十六进制编码/解码
+            pipeline.addLast(new TcpClientHexEncoder(),new TcpClientHexDecoder());
+        } else {
+            log.warn("编码为空或不支持的编码：{}",tcpCodec);
+            throw new RuntimeException("编码为空或不支持的编码");
+        }
         // 自定义ChannelInboundHandlerAdapter
-        pipeline.addLast(clientChannelInboundHandlerAdapter);
+        pipeline.addLast(new ClientChannelInboundHandlerAdapter());
     }
 }

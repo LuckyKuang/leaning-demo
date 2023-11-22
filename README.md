@@ -141,4 +141,6 @@ Eureka 2.0.0
 9026    netty-udp-client
 9027    netty-udp-client web
 9028    netty-udp-server
+9029    netty-tcp-client web
+9030    netty-tcp-server
 ```

@@ -17,24 +17,21 @@
 package com.luckykuang.tcp.server;
 
 import com.luckykuang.tcp.util.TcpServerChannelUtils;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 
 /**
+ * 通道具体实现
  * @author luckykuang
  * @date 2023/8/23 14:19
  */
 @Slf4j
-@Component
-@ChannelHandler.Sharable
-public class ServerChannelHandler extends SimpleChannelInboundHandler<Object> {
+public class ServerChannelInboundHandler extends SimpleChannelInboundHandler<String> {
 
     /**
      * 拿到传过来的msg数据，开始处理
@@ -44,16 +41,11 @@ public class ServerChannelHandler extends SimpleChannelInboundHandler<Object> {
      * @throws Exception
      */
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-        log.info("Netty tcp server receive msg : {}", msg);
-        if (msg == null){
-            return;
-        }
-        if (msg instanceof String received){
-            log.info("收到字符串消息：{}", received);
-            // 响应
-            ctx.channel().writeAndFlush("response msg：" + received).syncUninterruptibly();
-        }
+    protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
+        log.info("ChannelId:[{}],收到客户端消息：[{}]", ctx.channel().id().asLongText(),msg);
+        // TODO 在这里写服务端逻辑
+        // 暂时直接回复接收消息
+        ctx.channel().writeAndFlush(msg);
     }
 
     /**
@@ -122,13 +114,14 @@ public class ServerChannelHandler extends SimpleChannelInboundHandler<Object> {
         String clientIp = inSocket.getAddress().getHostAddress();
         if (event instanceof IdleStateEvent idleStateEvent) {
             if (idleStateEvent.state() == IdleState.READER_IDLE) {
-                log.info("ClientIp: " + clientIp + " READER_IDLE 读超时");
-                ctx.disconnect();//断开
+                log.info("ClientIp: " + clientIp + " 读超时");
+                // 断开连接
+                ctx.disconnect();
             } else if (idleStateEvent.state() == IdleState.WRITER_IDLE) {
-                log.info("ClientIp: " + clientIp + " WRITER_IDLE 写超时");
+                log.info("ClientIp: " + clientIp + " 写超时");
                 ctx.disconnect();
             } else if (idleStateEvent.state() == IdleState.ALL_IDLE) {
-                log.info("ClientIp: " + clientIp + " ALL_IDLE 总超时");
+                log.info("ClientIp: " + clientIp + " 读写超时");
                 ctx.disconnect();
             }
         }

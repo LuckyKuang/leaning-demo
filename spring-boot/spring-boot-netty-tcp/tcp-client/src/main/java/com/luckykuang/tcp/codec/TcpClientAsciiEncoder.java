@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package com.luckykuang.tcp;
+package com.luckykuang.tcp.codec;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToByteEncoder;
+
+import java.nio.charset.StandardCharsets;
 
 /**
- * tcp server
+ * 十进制编码
  * @author luckykuang
- * @date 2023/8/28 15:26
+ * @date 2023/11/21 16:12
  */
-@SpringBootApplication
-public class TcpServerApplication {
-    public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(TcpServerApplication.class);
-        // 关闭web服务
-        application.setWebApplicationType(WebApplicationType.NONE);
-        application.run(args);
+public class TcpClientAsciiEncoder extends MessageToByteEncoder<String> {
+    @Override
+    protected void encode(ChannelHandlerContext ctx, String in, ByteBuf out) throws Exception {
+        // 将字符串转换为字节数组
+        byte[] bytes = in.getBytes(StandardCharsets.US_ASCII);
+        // 写入ByteBuf以发送
+        out.writeBytes(bytes);
     }
 }

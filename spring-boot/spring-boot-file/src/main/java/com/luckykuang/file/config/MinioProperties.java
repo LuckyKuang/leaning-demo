@@ -14,23 +14,35 @@
  * limitations under the License.
  */
 
-package com.luckykuang.tcp;
+package com.luckykuang.file.config;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * tcp server
+ * minio 配置加载类
  * @author luckykuang
- * @date 2023/8/28 15:26
+ * @date 2023/11/22 14:39
  */
-@SpringBootApplication
-public class TcpServerApplication {
-    public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(TcpServerApplication.class);
-        // 关闭web服务
-        application.setWebApplicationType(WebApplicationType.NONE);
-        application.run(args);
-    }
+@Getter
+@Setter
+@Configuration
+@ConfigurationProperties(prefix = "minio")
+public class MinioProperties {
+    // 资源的 访问 URL
+    private String baseUrl;
+
+    // API 端点
+    private String endpoint;
+
+    // Bucket 存储桶
+    private String bucket;
+
+    // Access Key
+    private String accessKey;
+
+    // Secret Key
+    private String secretKey;
 }

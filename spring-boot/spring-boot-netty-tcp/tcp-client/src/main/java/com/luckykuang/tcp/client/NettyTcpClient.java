@@ -16,7 +16,6 @@
 
 package com.luckykuang.tcp.client;
 
-import com.luckykuang.tcp.util.TcpClientUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -25,12 +24,12 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import static com.luckykuang.tcp.constant.Constants.TCP_CACHE_CHANNEL;
 
 /**
  * netty 客户端
@@ -50,58 +49,60 @@ public class NettyTcpClient {
      */
     private Channel clientChannel;
 
-    @Value("${netty.tcp.client.ip}")
-    private String ip;
-    @Value("${netty.tcp.client.port}")
-    private Integer port;
-
     @Resource
     private ClientChannelInitializer clientChannelInitializer;
-
-    @PostConstruct
-    public void connect(){
-        try {
-            start();
-        } catch (Exception e){
-            log.info("服务端已断开连接，等待重连：{}",System.currentTimeMillis());
-        }
-    }
 
     /**
      * 开启tcp client连接
      */
-    public void start() throws Exception {
-        // Bootstrap 是一个启动NIO服务的辅助启动类 用于客户端
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(group);
-        bootstrap.channel(NioSocketChannel.class);
-        // 设置 I/O处理类,主要用于网络I/O事件，记录日志，编码、解码消息
-        bootstrap.handler(clientChannelInitializer);
-        // 心跳保活
-        bootstrap.option(ChannelOption.TCP_NODELAY, true);
-        // 连接服务端
-        ChannelFuture channelFuture = bootstrap.connect(ip, port).sync();
-        if (channelFuture != null && channelFuture.isSuccess()){
-            // tcp连接成功
-            TcpClientUtils.setTcpConnected(true);
+    public void open(String ip,int port, String codec) {
+        clientChannelInitializer.setTcpCodec(codec);
+        String sendCache = ip + ":" + port + "=" + codec;
+        ChannelFuture channel = TCP_CACHE_CHANNEL.get(sendCache);
+        if (channel != null && channel.channel().isActive()){
+            log.info("已开启tcp client连接，无需再次连接");
+            return;
+        }
+        try {
+            // Bootstrap 是一个启动NIO服务的辅助启动类 用于客户端
+            Bootstrap bootstrap = new Bootstrap();
+            bootstrap.group(group);
+            bootstrap.channel(NioSocketChannel.class);
+            bootstrap.option(ChannelOption.TCP_NODELAY, true);
+            bootstrap.option(ChannelOption.SO_REUSEADDR, true);
+            // 设置 I/O处理类,主要用于网络I/O事件，记录日志，编码、解码消息
+            bootstrap.handler(clientChannelInitializer);
+            // 连接服务端
+            ChannelFuture channelFuture = bootstrap.connect(ip, port);
             clientChannel = channelFuture.channel();
-            log.info("netty client start success");
+            TCP_CACHE_CHANNEL.put(sendCache,channelFuture);
+            log.info("netty tcp client start success");
             // 等待连接端口关闭
             channelFuture.channel().closeFuture().sync();
+        } catch (Exception e){
+            log.error("open tcp client exception",e);
+            throw new RuntimeException("open tcp client exception");
+        }
+    }
+
+    /**
+     * 关闭tcp client连接
+     */
+    public void close(){
+        if (clientChannel != null) {
+            clientChannel.close();
         }
     }
 
     @PreDestroy
     public void destroy() {
-        if (clientChannel != null) {
-            TcpClientUtils.removeTcpConnected();
-            clientChannel.close();
-        }
         if (!group.isShutdown()){
             try {
                 Future<?> groupFuture = group.shutdownGracefully().await();
                 if (!groupFuture.isSuccess()) {
                     log.error("Netty tcp client groupFuture shutdown fail, ", groupFuture.cause());
+                }else {
+                    log.info("Netty tcp client shutdown success");
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -109,6 +110,5 @@ public class NettyTcpClient {
                 throw new RuntimeException(e.getMessage());
             }
         }
-        log.info("Netty tcp client shutdown success");
     }
 }

@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package com.luckykuang.tcp;
+package com.luckykuang.tcp.vo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * tcp server
  * @author luckykuang
- * @date 2023/8/28 15:26
+ * @date 2023/11/21 16:53
  */
-@SpringBootApplication
-public class TcpServerApplication {
-    public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(TcpServerApplication.class);
-        // 关闭web服务
-        application.setWebApplicationType(WebApplicationType.NONE);
-        application.run(args);
-    }
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class SendVO extends ConnectVO {
+    /**
+     * 发送数据
+     */
+    private String data;
+    /**
+     * 是否添加回车换行符号，默认不添加
+     */
+    private Boolean enter = Boolean.FALSE;
 }

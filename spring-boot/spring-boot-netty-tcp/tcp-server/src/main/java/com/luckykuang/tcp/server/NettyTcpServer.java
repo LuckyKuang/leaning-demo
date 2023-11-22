@@ -16,6 +16,7 @@
 
 package com.luckykuang.tcp.server;
 
+import com.luckykuang.tcp.config.TcpServerConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -28,10 +29,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
+ * netty tcp server
  * @author luckykuang
  * @date 2023/8/23 14:14
  */
@@ -39,19 +40,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class NettyTcpServer {
     /**
-     * 处理Accept连接事件的线程，这里线程数设置为1即可，netty处理链接事件默认为单线程，过度设置反而浪费cpu资源
+     * 处理Accept连接事件的线程
      */
-    private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup();
     /**
-     * 处理handler的工作线程，其实也就是处理IO读写。线程数据默认为 CPU 核心数乘以2
+     * 处理handler的工作线程
      */
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     @Resource
     private ServerChannelInitializer serverChannelInitializer;
 
-    @Value("${netty.tcp.server.port}")
-    private Integer port;
+    @Resource
+    private TcpServerConfig config;
 
     /**
      * 与客户端建立连接后得到的通道对象
@@ -68,20 +69,25 @@ public class NettyTcpServer {
         try {
             // 启动类
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(bossGroup, workerGroup);//组配置，初始化ServerBootstrap的线程组
-            serverBootstrap.channel(NioServerSocketChannel.class);///构造channel通道工厂//bossGroup的通道，只是负责连接
-            serverBootstrap.childHandler(serverChannelInitializer);//设置通道处理者ChannelHandlerworkerGroup的处理器
-            serverBootstrap.option(ChannelOption.SO_BACKLOG, 1024);//socket参数，当服务器请求处理程全满时，用于临时存放已完成三次握手请求的队列的最大长度。如果未设置或所设置的值小于1，Java将使用默认值50。
-            serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);//启用心跳保活机制，tcp，默认2小时发一次心跳
-            // Future：异步任务的生命周期，可用来获取任务结果
-            ChannelFuture channelFuture = serverBootstrap.bind(port).syncUninterruptibly();//绑定端口，开启监听，同步等待
+            serverBootstrap.group(bossGroup, workerGroup);
+            serverBootstrap.channel(NioServerSocketChannel.class);
+            // 等待队列，当服务器请求处理程全满时，用于临时存放已完成三次握手请求的队列的最大长度。如果未设置或所设置的值小于1，Java将使用默认值50。
+            serverBootstrap.option(ChannelOption.SO_BACKLOG, 1024);
+            // 启用心跳保活机制，tcp，默认2小时发一次心跳
+            serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
+            // 自定义处理器
+            serverBootstrap.childHandler(serverChannelInitializer);
+            // 绑定服务端端口，开启监听，同步等待
+            ChannelFuture channelFuture = serverBootstrap.bind(config.getPort()).sync();
             if (channelFuture != null && channelFuture.isSuccess()) {
                 serverChannel = channelFuture.channel();//获取通道
-                log.info("Netty tcp server start success, port = {}", port);
-                serverChannel.closeFuture().syncUninterruptibly();
+                log.info("Netty tcp server start success, port = {}", config.getPort());
+                serverChannel.closeFuture().sync();
             } else {
-                log.error("Netty tcp server start fail, port = {}", port);
+                log.error("Netty tcp server start fail, port = {}", config.getPort());
             }
+        } catch (Exception e) {
+            log.error("Netty tcp server open exception",e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
@@ -93,20 +99,21 @@ public class NettyTcpServer {
      */
     @PreDestroy
     public void destroy() {
-        if (serverChannel != null) {
-            serverChannel.close();
-        }
         try {
             if (!workerGroup.isShutdown()){
                 Future<?> workerFuture = workerGroup.shutdownGracefully().await();
                 if (!workerFuture.isSuccess()) {
                     log.error("netty tcp workerGroup shutdown fail, ", workerFuture.cause());
+                }else {
+                    log.info("Netty tcp server workerGroup shutdown success");
                 }
             }
             if (!bossGroup.isShutdown()){
                 Future<?> bossFuture = bossGroup.shutdownGracefully().await();
                 if (!bossFuture.isSuccess()) {
                     log.error("netty tcp bossGroup shutdown fail, ", bossFuture.cause());
+                } else {
+                    log.info("Netty tcp server bossGroup shutdown success");
                 }
             }
         } catch (InterruptedException e) {
@@ -114,6 +121,5 @@ public class NettyTcpServer {
             log.error("Netty tcp server shutdown exception",e);
             throw new RuntimeException(e.getMessage());
         }
-        log.info("Netty tcp server shutdown success");
     }
 }

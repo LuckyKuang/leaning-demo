@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package com.luckykuang.tcp;
+package com.luckykuang.tcp.config;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * tcp server
+ * Netty 超时配置类
  * @author luckykuang
- * @date 2023/8/28 15:26
+ * @date 2023/11/21 16:06
  */
-@SpringBootApplication
-public class TcpServerApplication {
-    public static void main(String[] args) {
-        SpringApplication application = new SpringApplication(TcpServerApplication.class);
-        // 关闭web服务
-        application.setWebApplicationType(WebApplicationType.NONE);
-        application.run(args);
-    }
+@Getter
+@Setter
+@Configuration
+@ConfigurationProperties(prefix = "tcp")
+public class TcpClientConfig {
+    private long readerIdleTime;
+    private long writerIdleTime;
+    private long allIdleTime;
 }

@@ -16,38 +16,38 @@
 
 package com.luckykuang.tcp.client;
 
-import com.luckykuang.tcp.util.TcpClientUtils;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.apache.commons.lang3.StringUtils;
 
 import java.net.InetSocketAddress;
 
+import static com.luckykuang.tcp.constant.Constants.TCP_RESPONSE_DATA;
+import static com.luckykuang.tcp.constant.Constants.TCP_SEND_CACHE;
+
 /**
+ * 通道具体实现
  * @author luckykuang
  * @date 2023/8/24 16:52
  */
 @Slf4j
-@Component
-@ChannelHandler.Sharable
-public class ClientChannelInboundHandlerAdapter extends SimpleChannelInboundHandler<Object> {
+public class ClientChannelInboundHandlerAdapter extends SimpleChannelInboundHandler<String> {
 
     /**
      * 从服务端收到新的数据时，这个方法会在收到消息时被调用
      */
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, Object msg) {
-        if(msg == null){
-            return;
-        }
-        if (msg instanceof String received){
-            log.info("收到字符串消息：{}", received);
-            // 响应
-            ctx.channel().writeAndFlush("response msg："+received).syncUninterruptibly();
+    public void channelRead0(ChannelHandlerContext ctx, String msg) {
+        log.info("ChannelId:[{}],收到服务端消息返回：[{}]", ctx.channel().id().asLongText(),msg);
+        // 此处用于判断该管道是否发送消息，用于过滤连接服务器后，服务器返回的消息
+        String sendCache = TCP_SEND_CACHE.get(ctx.channel().id().asLongText());
+        if (StringUtils.isNotBlank(sendCache)) {
+            // 将收到的消息写入缓存，在业务端去读取
+            // 此处也可以替换成websocket来与前端交互，消息回复更加及时和准确
+            TCP_RESPONSE_DATA.put(ctx.channel().id().asLongText(),msg);
         }
     }
 
@@ -70,7 +70,6 @@ public class ClientChannelInboundHandlerAdapter extends SimpleChannelInboundHand
         super.channelInactive(ctx);
         InetSocketAddress inSocket = (InetSocketAddress) ctx.channel().remoteAddress();
         String serverIp = inSocket.getAddress().getHostAddress();
-        TcpClientUtils.removeTcpConnected();
         ctx.close(); // 断开连接时，必须关闭，否则造成资源浪费
         log.info("服务端已断开：:"+serverIp);
     }
@@ -93,7 +92,6 @@ public class ClientChannelInboundHandlerAdapter extends SimpleChannelInboundHand
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         log.info("exceptionCaught");
         cause.printStackTrace();
-        TcpClientUtils.removeTcpConnected();
         ctx.close();// 抛出异常，断开与客户端的连接
     }
 
@@ -110,13 +108,13 @@ public class ClientChannelInboundHandlerAdapter extends SimpleChannelInboundHand
         String serverIp = inSocket.getAddress().getHostAddress();
         if (event instanceof IdleStateEvent idleStateEvent) {
             if (idleStateEvent.state() == IdleState.READER_IDLE) {
-                log.info("serverIp: " + serverIp + " READER_IDLE 读超时");
+                log.info("serverIp: " + serverIp + " 读超时");
                 ctx.disconnect();//断开
             } else if (idleStateEvent.state() == IdleState.WRITER_IDLE) {
-                log.info("serverIp: " + serverIp + " WRITER_IDLE 写超时");
+                log.info("serverIp: " + serverIp + " 写超时");
                 ctx.disconnect();
             } else if (idleStateEvent.state() == IdleState.ALL_IDLE) {
-                log.info("serverIp: " + serverIp + " ALL_IDLE 总超时");
+                log.info("serverIp: " + serverIp + " 读写超时");
                 ctx.disconnect();
             }
         }

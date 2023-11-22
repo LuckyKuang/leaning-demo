@@ -3,3 +3,14 @@ server:
 spring:
   application:
     name: file
+minio:
+  # 访问资源的 URL
+  base-url: "http://192.168.1.100:9000/"
+  # API 端点
+  endpoint: "http://192.168.1.100:9000/"
+  # 上传的 Bucket
+  bucket: public
+  # Access Key
+  access-key: fmQleb8YBFUeMyxxxxxx
+  # Secret Key
+  secret-key: Bz6z1LVSW1vie4si3zxmtZVq666MV0v1MWxxxxxx
