@@ -96,7 +96,6 @@ public final class ConvertHexStrAndStrUtils {
             }
             hexStr = new String(array, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            e.printStackTrace();
             return "";
         }
         return hexStr;

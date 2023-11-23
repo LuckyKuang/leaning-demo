@@ -56,7 +56,7 @@ public final class WebsocketChannelUtils {
      */
     public static void addChannel(Channel channel) {
         GlobalGroup.add(channel);
-        ChannelMap.put(channel.id().asShortText(), channel.id());
+        ChannelMap.put(channel.id().asLongText(), channel.id());
         ClientConnect.getAndIncrement();
         log.info("当前已连接客户端数量：{}",ClientConnect.get());
     }
@@ -66,7 +66,7 @@ public final class WebsocketChannelUtils {
      */
     public static void removeChannel(Channel channel) {
         GlobalGroup.remove(channel);
-        ChannelMap.remove(channel.id().asShortText());
+        ChannelMap.remove(channel.id().asLongText());
         ClientConnect.getAndDecrement();
         log.info("当前已连接客户端数量：{}",ClientConnect.get());
     }

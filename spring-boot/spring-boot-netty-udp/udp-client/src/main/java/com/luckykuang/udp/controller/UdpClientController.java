@@ -16,11 +16,9 @@
 
 package com.luckykuang.udp.controller;
 
-import com.luckykuang.udp.util.UdpClientUtils;
-import com.luckykuang.udp.vo.SendMsgVO;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.luckykuang.udp.service.UdpClientService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,10 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("udp")
+@RequiredArgsConstructor
 public class UdpClientController {
-    @PostMapping("sendMsg")
-    public String sendMsg(@RequestBody @Validated SendMsgVO sendMsgVO){
-        UdpClientUtils.sendMsg(sendMsgVO);
-        return "success";
+
+    private final UdpClientService udpClientService;
+
+    @GetMapping("send")
+    public String send(String ip,Integer port,String data,String codec){
+        return udpClientService.send(ip,port,data,codec);
     }
 }

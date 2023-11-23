@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package com.luckykuang.udp.vo;
+package com.luckykuang.udp.config;
 
-import lombok.Data;
-
-import java.net.InetSocketAddress;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * 消息发送
+ * udp server 配置类
  * @author luckykuang
- * @date 2023/11/3 18:35
+ * @date 2023/11/22 17:21
  */
-@Data
-public class SendMsgVO {
-    /**
-     * 服务端地址
-     */
-    private InetSocketAddress inetSocketAddress;
-    /**
-     * 发送的数据
-     */
-    private String data;
+@Getter
+@Setter
+@Configuration
+@ConfigurationProperties(prefix = "udp")
+public class UdpServerConfig {
+    private int port;
+    private String codec;
 }

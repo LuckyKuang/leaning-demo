@@ -3,5 +3,3 @@ server:
 spring:
   application:
     name: udp-client
-udp:
-  clientPort: 9028

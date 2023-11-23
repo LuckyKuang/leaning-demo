@@ -18,13 +18,11 @@ package com.luckykuang.tcp.server;
 
 import com.luckykuang.tcp.config.TcpServerConfig;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.concurrent.Future;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
@@ -55,11 +53,6 @@ public class NettyTcpServer {
     private TcpServerConfig config;
 
     /**
-     * 与客户端建立连接后得到的通道对象
-     */
-    private Channel serverChannel;
-
-    /**
      * 开启Netty tcp server服务
      *
      * @return
@@ -80,9 +73,9 @@ public class NettyTcpServer {
             // 绑定服务端端口，开启监听，同步等待
             ChannelFuture channelFuture = serverBootstrap.bind(config.getPort()).sync();
             if (channelFuture != null && channelFuture.isSuccess()) {
-                serverChannel = channelFuture.channel();//获取通道
                 log.info("Netty tcp server start success, port = {}", config.getPort());
-                serverChannel.closeFuture().sync();
+                // 同步等待通道
+                channelFuture.channel().closeFuture().sync();
             } else {
                 log.error("Netty tcp server start fail, port = {}", config.getPort());
             }
@@ -99,27 +92,7 @@ public class NettyTcpServer {
      */
     @PreDestroy
     public void destroy() {
-        try {
-            if (!workerGroup.isShutdown()){
-                Future<?> workerFuture = workerGroup.shutdownGracefully().await();
-                if (!workerFuture.isSuccess()) {
-                    log.error("netty tcp workerGroup shutdown fail, ", workerFuture.cause());
-                }else {
-                    log.info("Netty tcp server workerGroup shutdown success");
-                }
-            }
-            if (!bossGroup.isShutdown()){
-                Future<?> bossFuture = bossGroup.shutdownGracefully().await();
-                if (!bossFuture.isSuccess()) {
-                    log.error("netty tcp bossGroup shutdown fail, ", bossFuture.cause());
-                } else {
-                    log.info("Netty tcp server bossGroup shutdown success");
-                }
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            log.error("Netty tcp server shutdown exception",e);
-            throw new RuntimeException(e.getMessage());
-        }
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
     }
 }

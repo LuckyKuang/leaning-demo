@@ -16,18 +16,49 @@
 
 package com.luckykuang.udp.server;
 
+import com.luckykuang.udp.codec.UdpServerAsciiDecoder;
+import com.luckykuang.udp.codec.UdpServerHexDecoder;
+import com.luckykuang.udp.config.UdpServerConfig;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * @author luckykuang
  * @date 2023/11/3 16:59
  */
+@Slf4j
+@Component
+@ChannelHandler.Sharable
 public class UdpServerChannelInitializer extends ChannelInitializer<NioDatagramChannel> {
+
+    @Resource
+    private UdpServerConfig config;
+
     @Override
     protected void initChannel(NioDatagramChannel ch) throws Exception {
-        // 如果自定义了编码，需要在这里添加解码处理
-        // ch.pipeline().addLast("decoder", new UdpServerDecoderHandle());
-        ch.pipeline().addLast("handler",new UdpServerReceivedHandler());
+        ChannelPipeline pipeline = ch.pipeline();
+        // 定义netty日志级别，用于调试
+        pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
+        String codec = config.getCodec();
+        // 字符串编解码器
+        if ("ascii".equalsIgnoreCase(codec)) {
+            // 十进制解码
+            pipeline.addLast(new UdpServerAsciiDecoder());
+        } else if ("hex".equalsIgnoreCase(codec)) {
+            // 十六进制解码
+            pipeline.addLast(new UdpServerHexDecoder());
+        } else {
+            log.warn("编码为空或不支持的编码：{}，请检查配置",codec);
+            throw new RuntimeException("编码为空或不支持的编码，请检查配置");
+        }
+        // 自定义处理器
+        ch.pipeline().addLast(new UdpServerChannelInboundHandler());
     }
 }

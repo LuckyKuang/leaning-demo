@@ -138,7 +138,6 @@ Eureka 2.0.0
 9014    file
 9024    netty-mqtt
 9025    netty-mqtt web
-9026    netty-udp-client
 9027    netty-udp-client web
 9028    netty-udp-server
 9029    netty-tcp-client web

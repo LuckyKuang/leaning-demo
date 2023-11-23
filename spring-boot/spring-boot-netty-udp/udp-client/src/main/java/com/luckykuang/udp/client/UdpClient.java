@@ -18,11 +18,12 @@ package com.luckykuang.udp.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -30,36 +31,25 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2023/11/3 15:44
  */
 @Slf4j
-public class UdpClient {
-    private static final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
-    public static Channel channel;
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class UdpClient {
 
     /**
-     * 启动服务
+     * 打开UDP管道
      */
-    public static void startup(int port) {
+    public static Channel open() {
+        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         try {
             Bootstrap clientBootstrap = new Bootstrap();
             clientBootstrap.group(eventLoopGroup)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new UdpClientChannelInitializer());
-            ChannelFuture channelFuture = clientBootstrap.bind(port).sync();
-            channel = channelFuture.channel();
-            channelFuture.channel().closeFuture().await();
+            return clientBootstrap.bind(0).sync().channel();
         } catch (Exception e) {
             log.error("netty udp client exception",e);
-            throw new RuntimeException("netty udp server exception:" + e.getMessage());
-        } finally {
-            log.info("netty udp client close!");
             eventLoopGroup.shutdownGracefully();
+            throw new RuntimeException("netty udp server exception:" + e.getMessage());
         }
-    }
-
-    /**
-     * 关闭服务
-     */
-    public static void shutdown() {
-        eventLoopGroup.shutdownGracefully();
     }
 }

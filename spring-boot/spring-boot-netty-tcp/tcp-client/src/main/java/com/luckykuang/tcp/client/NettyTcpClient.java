@@ -21,13 +21,18 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GlobalEventExecutor;
 import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static com.luckykuang.tcp.constant.Constants.TCP_CACHE_CHANNEL;
 
@@ -45,9 +50,9 @@ public class NettyTcpClient {
      */
     EventLoopGroup group = new NioEventLoopGroup();
     /**
-     * 与服务端建立连接后得到的通道对象
+     * 管道组
      */
-    private Channel clientChannel;
+    private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Resource
     private ClientChannelInitializer clientChannelInitializer;
@@ -74,9 +79,9 @@ public class NettyTcpClient {
             bootstrap.handler(clientChannelInitializer);
             // 连接服务端
             ChannelFuture channelFuture = bootstrap.connect(ip, port);
-            clientChannel = channelFuture.channel();
+            channelGroup.add(channelFuture.channel());
             TCP_CACHE_CHANNEL.put(sendCache,channelFuture);
-            log.info("netty tcp client start success");
+            log.info("netty tcpclient start success");
             // 等待连接端口关闭
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e){
@@ -86,29 +91,36 @@ public class NettyTcpClient {
     }
 
     /**
-     * 关闭tcp client连接
+     * 关闭指定管道
+     * @param channel 需要关闭的管道
+     * @return 成功-true 失败-false
      */
-    public void close(){
-        if (clientChannel != null) {
-            clientChannel.close();
+    public boolean close(Channel channel){
+        for (Channel ch : channelGroup) {
+            if (Objects.equals(channel,ch)){
+                log.info("ChannelId:[{}] close success",ch.id().asLongText());
+                return true;
+            }
         }
+        log.error("ChannelId:[{}] close fail",channel.id().asLongText());
+        return false;
     }
 
     @PreDestroy
     public void destroy() {
-        if (!group.isShutdown()){
-            try {
+        try {
+            if (!group.isShutdown()){
                 Future<?> groupFuture = group.shutdownGracefully().await();
                 if (!groupFuture.isSuccess()) {
-                    log.error("Netty tcp client groupFuture shutdown fail, ", groupFuture.cause());
+                    log.error("Netty tcp client group shutdown fail, ", groupFuture.cause());
                 }else {
-                    log.info("Netty tcp client shutdown success");
+                    log.info("Netty tcp client group shutdown success");
                 }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                log.error("Netty tcp client shutdown exception",e);
-                throw new RuntimeException(e.getMessage());
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("Netty tcp client shutdown exception",e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

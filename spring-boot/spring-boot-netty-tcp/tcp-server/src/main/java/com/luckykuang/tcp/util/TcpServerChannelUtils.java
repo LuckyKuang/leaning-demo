@@ -56,7 +56,7 @@ public final class TcpServerChannelUtils {
      */
     public static void addChannel(Channel channel) {
         GLOBAL_GROUP.add(channel);
-        CHANNEL_MAP.put(channel.id().asShortText(), channel.id());
+        CHANNEL_MAP.put(channel.id().asLongText(), channel.id());
         CLIENT_CONNECT.getAndIncrement();
         log.info("当前已连接客户端数量：{}", CLIENT_CONNECT.get());
     }
@@ -66,7 +66,7 @@ public final class TcpServerChannelUtils {
      */
     public static void removeChannel(Channel channel) {
         GLOBAL_GROUP.remove(channel);
-        CHANNEL_MAP.remove(channel.id().asShortText());
+        CHANNEL_MAP.remove(channel.id().asLongText());
         CLIENT_CONNECT.getAndDecrement();
         log.info("当前已连接客户端数量：{}", CLIENT_CONNECT.get());
     }

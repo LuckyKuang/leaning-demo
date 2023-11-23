@@ -14,30 +14,21 @@
  * limitations under the License.
  */
 
-package com.luckykuang.udp.client;
+package com.luckykuang.udp.constant;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
+ * 全局静态属性
  * @author luckykuang
- * @date 2023/11/3 18:27
+ * @date 2023/11/23 16:49
  */
-@Component
-public class UdpClientInit {
-    @Value("${udp.clientPort}")
-    private Integer port;
+public interface Constants {
+    /**
+     * 用于缓存编码信息
+     */
+    AtomicReference<String> UDP_CODEC = new AtomicReference<>();
 
-    @PostConstruct
-    public void start(){
-        // 此处需要异步启动，避免阻塞主线程，导致web服务不可用
-        new Thread(() -> UdpClient.startup(port)).start();
-    }
-
-    @PreDestroy
-    public void destroy(){
-        UdpClient.shutdown();
-    }
+    String ASCII = "ascii";
+    String HEX = "hex";
 }

@@ -16,18 +16,51 @@
 
 package com.luckykuang.udp.client;
 
+import com.luckykuang.udp.codec.UdpClientAsciiDecoder;
+import com.luckykuang.udp.codec.UdpClientAsciiEncoder;
+import com.luckykuang.udp.codec.UdpClientHexDecoder;
+import com.luckykuang.udp.codec.UdpClientHexEncoder;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+import static com.luckykuang.udp.constant.Constants.*;
 
 /**
  * @author luckykuang
  * @date 2023/11/3 17:30
  */
-public class UdpClientChannelInitializer  extends ChannelInitializer<NioDatagramChannel> {
+@Slf4j
+@ChannelHandler.Sharable
+public class UdpClientChannelInitializer extends ChannelInitializer<NioDatagramChannel> {
+
+    public static void setUdpCodec(String code){
+        UDP_CODEC.set(code);
+    }
+
     @Override
     protected void initChannel(NioDatagramChannel ch) throws Exception {
-        // 如果自定义了编码，需要在这里添加编码处理
-        // ch.pipeline().addLast("encoder", new UdpClientEncoderHandle());
-        ch.pipeline().addLast("handler",new UdpClientReceivedHandler());
+        ChannelPipeline pipeline = ch.pipeline();
+        // netty日志打印级别
+        pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
+        String udpCodec = UDP_CODEC.get();
+        // 字符串编解码器
+        if (StringUtils.isNotBlank(udpCodec) && ASCII.equalsIgnoreCase(udpCodec)){
+            // 十进制编码/解码
+            pipeline.addLast(new UdpClientAsciiEncoder(),new UdpClientAsciiDecoder());
+        } else if (StringUtils.isNotBlank(udpCodec) && HEX.equalsIgnoreCase(udpCodec)) {
+            // 十六进制编码/解码
+            pipeline.addLast(new UdpClientHexEncoder(),new UdpClientHexDecoder());
+        } else {
+            log.warn("编码为空或不支持的编码：{}",udpCodec);
+            throw new RuntimeException("编码为空或不支持的编码");
+        }
+        // 自定义处理器
+        pipeline.addLast(new UdpClientChannelInboundHandler());
     }
 }

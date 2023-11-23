@@ -97,7 +97,7 @@ public class ServerChannelInboundHandler extends SimpleChannelInboundHandler<Str
         InetSocketAddress inSocket = (InetSocketAddress) ctx.channel().remoteAddress();
         String clientIp = inSocket.getAddress().getHostAddress();
         //发生异常，关闭连接
-        log.error("客户端地址：{}，连接id：{}的通道发生异常，即将断开连接", clientIp, ctx.channel().id().asShortText());
+        log.error("客户端地址：{}，连接id：{}的通道发生异常，即将断开连接", clientIp, ctx.channel().id().asLongText());
         ctx.close();//再次建议close
     }
 

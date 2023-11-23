@@ -121,7 +121,7 @@ public class FileServiceImpl implements FileService {
         try (OutputStream outputStream = new FileOutputStream(fileName)) {
             outputStream.write(chunk);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("保存文件失败",e);
         }
     }
 

@@ -14,29 +14,12 @@
  * limitations under the License.
  */
 
-package com.luckykuang.udp.server;
-
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+package com.luckykuang.udp.service;
 
 /**
  * @author luckykuang
- * @date 2023/11/3 18:04
+ * @date 2023/11/23 16:23
  */
-@Component
-public class UdpServerInit {
-    @Value("${udp.serverPort}")
-    private Integer port;
-
-    @PostConstruct
-    public void start(){
-        UdpServer.startup(port);
-    }
-
-    @PreDestroy
-    public void destroy(){
-        UdpServer.shutdown();
-    }
+public interface UdpClientService {
+    String send(String ip, Integer port, String data,String codec);
 }

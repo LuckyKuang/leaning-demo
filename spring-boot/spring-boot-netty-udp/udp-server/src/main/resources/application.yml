@@ -1,5 +1,8 @@
 spring:
   application:
-    name: udp-server
+    name: netty-udp-server
 udp:
-  serverPort: 9029
+  # udp server 端口
+  port: 9028
+  # udp server 编码 十进制：ascii 十六进制：hex
+  codec: ascii

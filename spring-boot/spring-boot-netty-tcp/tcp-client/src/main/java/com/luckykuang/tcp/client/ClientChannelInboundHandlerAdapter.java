@@ -90,8 +90,7 @@ public class ClientChannelInboundHandlerAdapter extends SimpleChannelInboundHand
      */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        log.info("exceptionCaught");
-        cause.printStackTrace();
+        log.error("exceptionCaught",cause);
         ctx.close();// 抛出异常，断开与客户端的连接
     }
 

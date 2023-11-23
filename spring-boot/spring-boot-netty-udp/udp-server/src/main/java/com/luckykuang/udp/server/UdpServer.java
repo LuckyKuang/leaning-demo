@@ -16,55 +16,58 @@
 
 package com.luckykuang.udp.server;
 
+import com.luckykuang.udp.config.UdpServerConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.util.concurrent.GlobalEventExecutor;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * @author luckykuang
  * @date 2023/11/3 15:44
  */
 @Slf4j
+@Component
 public class UdpServer {
-    private static final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
-    private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+    @Resource
+    private UdpServerConfig config;
+
+    @Resource
+    private UdpServerChannelInitializer udpServerChannelInitializer;
 
     /**
      * 启动服务
      */
-    public static void startup(int port) {
-        ChannelFuture channelFuture = null;
+    @PostConstruct
+    public void open() {
+        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         try {
             Bootstrap serverBootstrap = new Bootstrap();
-            serverBootstrap.group(eventLoopGroup)
-                    .channel(NioDatagramChannel.class)
-                    .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(new UdpServerChannelInitializer());
-            channelFuture = serverBootstrap.bind(port).sync();
-            channelGroup.add(channelFuture.channel());
-            channelFuture.channel().closeFuture().await();
+            serverBootstrap.group(eventLoopGroup);
+            serverBootstrap.channel(NioDatagramChannel.class);
+            serverBootstrap.option(ChannelOption.SO_BROADCAST, true);
+            serverBootstrap.handler(udpServerChannelInitializer);
+            ChannelFuture channelFuture = serverBootstrap.bind(config.getPort()).sync();
+            if (channelFuture != null && channelFuture.isSuccess()) {
+                log.info("Netty udp server start success, port = {}", config.getPort());
+                // 同步等待通道
+                channelFuture.channel().closeFuture().await();
+            } else {
+                log.error("Netty udp server start fail, port = {}", config.getPort());
+            }
         } catch (Exception e) {
-            log.error("netty udp server exception port:{}",port,e);
+            log.error("netty udp server exception port:{}",config.getPort(),e);
             throw new RuntimeException("netty udp server exception:" + e.getMessage());
         } finally {
-            log.info("netty udp server close!");
+            log.info("netty udp server shutdown!");
             eventLoopGroup.shutdownGracefully();
         }
-    }
-
-    /**
-     * 关闭服务
-     */
-    public static void shutdown() {
-        log.info("netty udp server shutdown!");
-        channelGroup.close();
-        eventLoopGroup.shutdownGracefully();
     }
 }
