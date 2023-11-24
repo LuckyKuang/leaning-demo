@@ -52,16 +52,15 @@ public class UdpServer {
             Bootstrap serverBootstrap = new Bootstrap();
             serverBootstrap.group(eventLoopGroup);
             serverBootstrap.channel(NioDatagramChannel.class);
+            // 支持广播
             serverBootstrap.option(ChannelOption.SO_BROADCAST, true);
+            // 允许端口重用，即使该端口已经被绑定，服务端一点要加这个
+            serverBootstrap.option(ChannelOption.SO_REUSEADDR,true);
             serverBootstrap.handler(udpServerChannelInitializer);
             ChannelFuture channelFuture = serverBootstrap.bind(config.getPort()).sync();
-            if (channelFuture != null && channelFuture.isSuccess()) {
-                log.info("Netty udp server start success, port = {}", config.getPort());
-                // 同步等待通道
-                channelFuture.channel().closeFuture().await();
-            } else {
-                log.error("Netty udp server start fail, port = {}", config.getPort());
-            }
+            log.info("Netty udp server start success, port = {}", config.getPort());
+            // 同步等待通道
+            channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
             log.error("netty udp server exception port:{}",config.getPort(),e);
             throw new RuntimeException("netty udp server exception:" + e.getMessage());

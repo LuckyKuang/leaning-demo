@@ -33,15 +33,15 @@ import java.util.concurrent.TimeUnit;
  * websocket实现类
  * session使用API：
  *      //发送文本消息
- *      session.getAsyncRemote().sendText(String message);
+ *      session.getBasicRemote().sendText(String message);
  *      //发送二进制消息
- *      session.getAsyncRemote().sendBinary(ByteBuffer message);
+ *      session.getBasicRemote().sendBinary(ByteBuffer message);
  *      //发送对象消息，会尝试使用Encoder编码
- *      session.getAsyncRemote().sendObject(Object message);
+ *      session.getBasicRemote().sendObject(Object message);
  *      //发送ping
- *      session.getAsyncRemote().sendPing(ByteBuffer buffer);
+ *      session.getBasicRemote().sendPing(ByteBuffer buffer);
  *      //发送pong
- *      session.getAsyncRemote().sendPong(ByteBuffer buffer);
+ *      session.getBasicRemote().sendPong(ByteBuffer buffer);
  * ping/pong详解：
  *      ping和pong是用来维护tcp心跳的。
  *      服务端维护ping消息发送，服务端就回复pong消息；
@@ -82,14 +82,14 @@ public class JakartaWebSocketClientEndpoint {
      * 接收文本信息
      */
     @OnMessage
-    public void onMessage(Session session, String message) {
+    public void onMessage(Session session, String message) throws IOException {
         log.info("【websocket消息】收到服务端消息:" + message);
         if (StringUtils.isBlank(message)) {
             return;
         }
         // 此处做业务处理
         log.info("【websocket消息】收到服务端消息:" + message);
-        session.getAsyncRemote().sendText(message);
+        session.getBasicRemote().sendText(message);
     }
 
     /**
@@ -107,7 +107,7 @@ public class JakartaWebSocketClientEndpoint {
      * 接收二进制信息，也可以用byte[]接收
      */
     @OnMessage
-    public void onMessage(Session session, ByteBuffer message) {
+    public void onMessage(Session session, ByteBuffer message) throws IOException {
         String msg = message.toString();
         log.info("【websocket消息】收到服务端Binary消息:" + msg);
         if (StringUtils.isBlank(msg)) {
@@ -115,7 +115,7 @@ public class JakartaWebSocketClientEndpoint {
         }
         // 此处做业务处理
         log.info("【websocket消息】收到服务端Binary消息:" + msg);
-        session.getAsyncRemote().sendBinary(message);
+        session.getBasicRemote().sendBinary(message);
     }
 
     /**
@@ -130,11 +130,11 @@ public class JakartaWebSocketClientEndpoint {
     /**
      * 主动发送消息给服务端
      */
-    public void sendMessage(String message) {
+    public void sendMessage(String message) throws IOException {
         if (session == null) {
             session = createConnect();
         }
-        session.getAsyncRemote().sendText(message);
+        session.getBasicRemote().sendText(message);
     }
 
     /**
@@ -149,7 +149,7 @@ public class JakartaWebSocketClientEndpoint {
                         session = createConnect();
                     }
                     TimeUnit.SECONDS.sleep(5);
-                    session.getAsyncRemote().sendPing(ByteBuffer.wrap("ok".getBytes()));
+                    session.getBasicRemote().sendPing(ByteBuffer.wrap("ok".getBytes()));
                 } catch (Exception e){
                     log.error("websocket服务端异常，停止ping心跳发送");
                     Thread.currentThread().interrupt();

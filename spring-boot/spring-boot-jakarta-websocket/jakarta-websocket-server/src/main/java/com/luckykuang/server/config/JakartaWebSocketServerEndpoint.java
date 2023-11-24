@@ -25,27 +25,30 @@ import org.springframework.stereotype.Component;
 
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * websocket实现类
  * session使用API：
  *      //发送文本消息
- *      session.getAsyncRemote().sendText(String message);
+ *      session.getBasicRemote().sendText(String message);
  *      //发送二进制消息
- *      session.getAsyncRemote().sendBinary(ByteBuffer message);
+ *      session.getBasicRemote().sendBinary(ByteBuffer message);
  *      //发送对象消息，会尝试使用Encoder编码
- *      session.getAsyncRemote().sendObject(Object message);
+ *      session.getBasicRemote().sendObject(Object message);
  *      //发送ping
- *      session.getAsyncRemote().sendPing(ByteBuffer buffer);
+ *      session.getBasicRemote().sendPing(ByteBuffer buffer);
  *      //发送pong
- *      session.getAsyncRemote().sendPong(ByteBuffer buffer);
+ *      session.getBasicRemote().sendPong(ByteBuffer buffer);
  * ping/pong详解：
  *      ping和pong是用来维护tcp心跳的。
  *      客户端维护ping消息发送，服务端就回复pong消息；
  *      客户端维护ping，只要服务端没有应答pong消息，就认为认为连接断开，断联后发起重连
+ * 注意：
+ *      getAsyncRemote()是异步发送，getBasicRemote()是同步发送，存在并发情况下，一定要用同步发送，异步会报错 "TEXT_FULL_WRITING"
+ *      发送消息是锁住webSockets，也是因为存在高并发情况下，解决 "TEXT_FULL_WRITING" 报错问题
  * @author luckykuang
  * @date 2023/9/6 16:58
  */
@@ -59,9 +62,9 @@ public class JakartaWebSocketServerEndpoint {
     // 连接topic，根据业务来定，也可以是用户id或者其他
     private String topic;
     // JakartaWebSocketServerEndpoint是当前类名
-    private static final CopyOnWriteArraySet<JakartaWebSocketServerEndpoint> webSockets = new CopyOnWriteArraySet<>();
+    private static final Map<String, JakartaWebSocketServerEndpoint> webSockets = new ConcurrentHashMap<>();
     // 用来存在线连接用户信息
-    private static final ConcurrentHashMap<String, Session> sessionPool = new ConcurrentHashMap<>();
+    private static final Map<String, Session> sessionPool = new ConcurrentHashMap<>();
 
     /**
      * 连接建立
@@ -71,7 +74,7 @@ public class JakartaWebSocketServerEndpoint {
         try {
             this.session = session;
             this.topic = topic;
-            webSockets.add(this);
+            webSockets.put(session.getId(), this);
             sessionPool.put(session.getId(), session);
             log.info("【websocket消息】有新的连接，总数为:" + webSockets.size());
         } catch (Exception e) {
@@ -85,8 +88,8 @@ public class JakartaWebSocketServerEndpoint {
     @OnClose
     public void onClose(Session session, CloseReason reason) {
         try {
-            webSockets.remove(this);
-            sessionPool.remove(this.session.getId());
+            webSockets.remove(session.getId());
+            sessionPool.remove(session.getId());
             log.info("【websocket消息】连接断开，总数为:" + webSockets.size());
         } catch (Exception e) {
             log.error("websocket onClose exception:", e);
@@ -137,8 +140,8 @@ public class JakartaWebSocketServerEndpoint {
     @OnError
     public void onError(Session session, Throwable e) {
         //异常处理
-        webSockets.remove(this);
-        sessionPool.remove(this.session.getId());
+        webSockets.remove(session.getId());
+        sessionPool.remove(session.getId());
         log.error("【websocket消息】[{}]消息反序列化失败", topic, e);
     }
 
@@ -147,10 +150,12 @@ public class JakartaWebSocketServerEndpoint {
      */
     public void sendAllMessage(String message) {
         log.info("【websocket消息】广播消息:" + message);
-        for (JakartaWebSocketServerEndpoint webSocket : webSockets) {
+        for (JakartaWebSocketServerEndpoint webSocket : webSockets.values()) {
             try {
-                if (webSocket.session.isOpen()) {
-                    webSocket.session.getAsyncRemote().sendText(message);
+                synchronized (webSockets) {
+                    if (webSocket.session.isOpen()) {
+                        webSocket.session.getBasicRemote().sendText(message);
+                    }
                 }
             } catch (Exception e) {
                 log.error("【websocket消息】 广播消息异常：", e);
@@ -163,14 +168,16 @@ public class JakartaWebSocketServerEndpoint {
      */
     public void sendTopicMessage(String topic, String message) {
         log.info("【websocket消息】topic消息:{},topic:{}", message, topic);
-        List<JakartaWebSocketServerEndpoint> webSocketList = webSockets.stream()
+        List<JakartaWebSocketServerEndpoint> webSocketList = webSockets.values().stream()
                 .filter(webSocket -> Objects.equals(webSocket.topic, topic)).toList();
         if (!webSocketList.isEmpty()) {
             for (JakartaWebSocketServerEndpoint webSocket : webSocketList) {
                 try {
-                    if (webSocket.session.isOpen()) {
-                        log.info("【websocket消息】topic消息开始发送 topic:{},msg:{}", webSocket.topic, message);
-                        webSocket.session.getAsyncRemote().sendText(message);
+                    synchronized (webSockets) {
+                        if (webSocket.session.isOpen()) {
+                            log.info("【websocket消息】topic消息开始发送 topic:{},msg:{}", webSocket.topic, message);
+                            webSocket.session.getBasicRemote().sendText(message);
+                        }
                     }
                 } catch (Exception e) {
                     log.error("【websocket消息】 广播消息异常：", e);
@@ -186,8 +193,10 @@ public class JakartaWebSocketServerEndpoint {
         Session getSession = sessionPool.get(session.getId());
         if (getSession != null && getSession.isOpen()) {
             try {
-                log.info("【websocket消息】 单点消息:" + message);
-                getSession.getAsyncRemote().sendText(message);
+                synchronized (webSockets) {
+                    log.info("【websocket消息】 单点消息:" + message);
+                    getSession.getBasicRemote().sendText(message);
+                }
             } catch (Exception e) {
                 log.error("【websocket消息】 单点消息异常：", e);
             }

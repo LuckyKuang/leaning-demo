@@ -2,7 +2,7 @@ tcp:
   # tcp server 端口
   port: 9030
   # tcp server 编码 十进制：ascii 十六进制：hex
-  codec: hex
+  codec: ascii
   # 通道没接收消息，默认0禁用
   readerIdleTime: 15
   # 通道没发送消息，默认0禁用

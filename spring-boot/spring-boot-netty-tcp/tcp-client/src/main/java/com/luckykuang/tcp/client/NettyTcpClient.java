@@ -73,15 +73,17 @@ public class NettyTcpClient {
             Bootstrap bootstrap = new Bootstrap();
             bootstrap.group(group);
             bootstrap.channel(NioSocketChannel.class);
+            // 禁用nagle算法
             bootstrap.option(ChannelOption.TCP_NODELAY, true);
+            // 允许地址和端口重用，即使该端口已经被绑定，服务端一点要加这个
             bootstrap.option(ChannelOption.SO_REUSEADDR, true);
             // 设置 I/O处理类,主要用于网络I/O事件，记录日志，编码、解码消息
             bootstrap.handler(clientChannelInitializer);
             // 连接服务端
-            ChannelFuture channelFuture = bootstrap.connect(ip, port);
+            ChannelFuture channelFuture = bootstrap.connect(ip, port).sync();
             channelGroup.add(channelFuture.channel());
             TCP_CACHE_CHANNEL.put(sendCache,channelFuture);
-            log.info("netty tcpclient start success");
+            log.info("netty tcp client start success");
             // 等待连接端口关闭
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e){

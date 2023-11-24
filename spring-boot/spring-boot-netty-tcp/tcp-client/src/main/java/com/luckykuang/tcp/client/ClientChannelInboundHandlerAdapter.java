@@ -81,7 +81,7 @@ public class ClientChannelInboundHandlerAdapter extends SimpleChannelInboundHand
     public void channelReadComplete(ChannelHandlerContext ctx) {
         InetSocketAddress inSocket = (InetSocketAddress) ctx.channel().remoteAddress();
         String serverIp = inSocket.getAddress().getHostAddress();
-        log.info("channelReadComplete serverIp:{}",serverIp);
+        log.info("数据读取完成 serverIp:{}",serverIp);
         ctx.flush();
     }
 

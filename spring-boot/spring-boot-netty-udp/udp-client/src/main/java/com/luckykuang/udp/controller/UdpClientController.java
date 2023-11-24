@@ -33,6 +33,14 @@ public class UdpClientController {
 
     private final UdpClientService udpClientService;
 
+    /**
+     * 发送udp消息
+     * @param ip    地址 比如：单播(192.168.1.100) 广播(192.168.1.255)
+     * @param port  端口
+     * @param data  数据
+     * @param codec 编码 十进制-ascii 十六进制-hex
+     * @return
+     */
     @GetMapping("send")
     public String send(String ip,Integer port,String data,String codec){
         return udpClientService.send(ip,port,data,codec);

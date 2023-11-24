@@ -43,6 +43,7 @@ public final class UdpClient {
             Bootstrap clientBootstrap = new Bootstrap();
             clientBootstrap.group(eventLoopGroup)
                     .channel(NioDatagramChannel.class)
+                    // 支持广播
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new UdpClientChannelInitializer());
             return clientBootstrap.bind(0).sync().channel();

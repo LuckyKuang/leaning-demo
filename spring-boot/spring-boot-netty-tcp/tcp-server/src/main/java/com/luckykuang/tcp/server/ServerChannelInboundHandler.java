@@ -17,6 +17,8 @@
 package com.luckykuang.tcp.server;
 
 import com.luckykuang.tcp.util.TcpServerChannelUtils;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
@@ -45,7 +47,11 @@ public class ServerChannelInboundHandler extends SimpleChannelInboundHandler<Str
         log.info("ChannelId:[{}],收到客户端消息：[{}]", ctx.channel().id().asLongText(),msg);
         // TODO 在这里写服务端逻辑
         // 暂时直接回复接收消息
-        ctx.channel().writeAndFlush(msg);
+        // 十进制时回复方式
+        ByteBuf resp = Unpooled.copiedBuffer(msg.getBytes());
+        ctx.channel().writeAndFlush(resp);
+        // 十六进制时回复方式
+//        ctx.channel().writeAndFlush(msg);
     }
 
     /**
@@ -97,7 +103,7 @@ public class ServerChannelInboundHandler extends SimpleChannelInboundHandler<Str
         InetSocketAddress inSocket = (InetSocketAddress) ctx.channel().remoteAddress();
         String clientIp = inSocket.getAddress().getHostAddress();
         //发生异常，关闭连接
-        log.error("客户端地址：{}，连接id：{}的通道发生异常，即将断开连接", clientIp, ctx.channel().id().asLongText());
+        log.error("客户端地址：{}，连接id：{}的通道发生异常，连接已断开", clientIp, ctx.channel().id().asLongText());
         ctx.close();//再次建议close
     }
 

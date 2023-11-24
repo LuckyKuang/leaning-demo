@@ -40,7 +40,7 @@ public class TcpServerAsciiDecoder extends ByteToMessageDecoder {
             in.readBytes(bytes);
             // 将客户端返回的信息解码为字符串
             String response = new String(bytes, StandardCharsets.US_ASCII);
-            log.info("接收到客户端返回：[{}]",response);
+            log.info("接收到客户端消息：[{}]",response);
             out.add(response);
         }
     }

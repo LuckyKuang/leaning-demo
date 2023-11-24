@@ -64,21 +64,20 @@ public class NettyTcpServer {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(bossGroup, workerGroup);
             serverBootstrap.channel(NioServerSocketChannel.class);
-            // 等待队列，当服务器请求处理程全满时，用于临时存放已完成三次握手请求的队列的最大长度。如果未设置或所设置的值小于1，Java将使用默认值50。
+            // 等待队列，当服务器请求处理程全满时，用于临时存放已完成三次握手请求的队列的最大长度。
+            // 如果未设置或所设置的值小于1，Java将使用默认值50。
             serverBootstrap.option(ChannelOption.SO_BACKLOG, 1024);
+            // 允许地址和端口重用，即使该端口已经被绑定，服务端一点要加这个
+            serverBootstrap.option(ChannelOption.SO_REUSEADDR,true);
             // 启用心跳保活机制，tcp，默认2小时发一次心跳
             serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
             // 自定义处理器
             serverBootstrap.childHandler(serverChannelInitializer);
             // 绑定服务端端口，开启监听，同步等待
             ChannelFuture channelFuture = serverBootstrap.bind(config.getPort()).sync();
-            if (channelFuture != null && channelFuture.isSuccess()) {
-                log.info("Netty tcp server start success, port = {}", config.getPort());
-                // 同步等待通道
-                channelFuture.channel().closeFuture().sync();
-            } else {
-                log.error("Netty tcp server start fail, port = {}", config.getPort());
-            }
+            log.info("Netty tcp server start success, port = {}", config.getPort());
+            // 同步等待通道
+            channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
             log.error("Netty tcp server open exception",e);
         } finally {
