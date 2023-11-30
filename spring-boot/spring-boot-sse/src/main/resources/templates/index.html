@@ -1,0 +1,80 @@
+<!--
+  ~ Copyright 2015-2023 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+</head>
+
+<body>
+<div id="result"></div>
+
+<script>
+    // 连接服务器
+    var sseSource = new EventSource("http://localhost:9026/sse/connect");
+
+    // 连接打开
+    sseSource.onopen = function () {
+        console.log("连接打开");
+    }
+
+    // 连接错误
+    sseSource.onerror = function (err) {
+        console.log("连接错误:", err);
+        // 关闭连接
+        handleCloseSse();
+    }
+
+    // 接收到数据
+    sseSource.onmessage = function (event) {
+        console.log("接收到数据:", event);
+        handleReceiveData(JSON.parse(event.data))
+    }
+
+    // 关闭链接
+    function handleCloseSse() {
+        sseSource.close()
+    }
+
+    // 处理服务器返回的数据
+    function handleReceiveData(data) {
+        let div = document.createElement('div');
+        div.innerHTML = data.data;
+        document.getElementById('result').appendChild(div);
+    }
+
+    // 通过http发送消息
+    function sendMessage() {
+        const messageVO = document.querySelector("#messageVO")
+        const data = {
+            data: messageVO.value
+        }
+
+        messageVO.value = ''
+
+        fetch('http://localhost:9026/sse/sendMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        })
+    }
+</script>
+</body>
+</html>
