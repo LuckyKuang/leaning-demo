@@ -1,0 +1,18 @@
+server:
+    port: 9021
+spring:
+    application:
+        name: influxdb2
+#    influx:
+#        url: http://1.12.248.106:8086
+#        user: influxdb
+#        password: influxdb8848
+influxdb2:
+    # 地址
+    url: 'http://1.12.248.106:8086'
+    # token
+    token: 'rvywa2HfqXAhcorRvZZY-_7YCzkq6geSI4-5AGmbunMjZjstDgKxaBmsT2bCNezycUxurO6O7McxBagjyyxN8g=='
+    # 组织
+    org-id: 11556b0a-1666-4a42-9ef3-a9bcd9033cef
+    # 桶(表) bucket可去掉,桶可以在业务上做选择而不写在配置中，必须大于等于16个字节
+    bucket-name: public-a9bcd9033cef-a9bcd9033cef

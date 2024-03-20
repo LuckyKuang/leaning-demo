@@ -51,6 +51,7 @@
         <module>spring-boot-netty-mqtt</module>
         <module>spring-boot-netty-udp</module>
         <module>spring-boot-sse</module>
+        <module>spring-boot-influxdb2</module>
     </modules>
 
     <dependencies>
