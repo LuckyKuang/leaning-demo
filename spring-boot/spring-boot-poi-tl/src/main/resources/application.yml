@@ -1,0 +1,5 @@
+server:
+  port: 9031
+spring:
+  application:
+    name: poi-tl
