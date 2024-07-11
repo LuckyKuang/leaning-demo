@@ -25,5 +25,6 @@ public class Student implements Serializable {
     @NotNull(message = "自定义消息")
     private Integer age;
     @NotEmpty
+    @Size(min = 10, max = 100)
     private List<String> list;
 }

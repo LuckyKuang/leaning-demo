@@ -31,9 +31,19 @@ public class TestController {
 
     @GetMapping("testValidated")
     public ApiResult<?> testValidated(@NotBlank(message = "自定义消息") String name,
-                              @NotBlank String name2,
+                              @NotBlank String nickname,
                               @NotNull(message = "自定义消息") Integer age){
-        return ApiResult.success(name);
+        return ApiResult.success(name + nickname + age);
+    }
+
+    @GetMapping("testValidated2")
+    public ApiResult<?> testValidated2(@Validated Student student){
+        return ApiResult.success(student);
+    }
+
+    @PostMapping("testValidated3")
+    public ApiResult<?> testValidated3(@Validated Student student){
+        return ApiResult.success(student);
     }
 
     @PostMapping("testRedis")

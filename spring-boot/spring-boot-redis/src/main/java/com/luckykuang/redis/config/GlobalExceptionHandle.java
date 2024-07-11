@@ -2,6 +2,7 @@ package com.luckykuang.redis.config;
 
 import com.luckykuang.redis.base.ApiResult;
 import com.luckykuang.redis.enums.ErrorCode;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -23,28 +24,30 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandle {
 
     /**
-     * 处理方法上 @Valid/@Validated 校验不通过产生的异常
-     * <br/>如果自定义消息添加"custom_"前缀，将会只输出自定义的message
-     * <br/>否则默认输出fieldName + message
+     * 处理方法上添加 @Valid/@Validated 校验不通过产生的异常，如 @RequestBody 请求参数上格式错误
+     * <br/>如果有自定义消息，将会直接输出自定义customMessage
+     * <br/>否则直接输出默认fieldName + defaultMessage
      */
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ApiResult<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> {
+                    ConstraintViolation<?> unwrap = fieldError.unwrap(ConstraintViolation.class);
+                    String customMessage = unwrap.getMessageTemplate();
                     String defaultMessage = fieldError.getDefaultMessage();
-                    String fieldName = fieldError.getField();
-                    if (defaultMessage.startsWith("custom_")){
-                        return defaultMessage.replace("custom_","");
+                    if (customMessage.equals(defaultMessage)) {
+                        return customMessage;
                     }
+                    String fieldName = fieldError.getField();
                     return fieldName + defaultMessage;
                 }).collect(Collectors.joining(";"));
         log.warn("[methodArgumentNotValidExceptionHandler] msg:{}", message);
-        return ApiResult.failed(1000,message);
+        return ApiResult.failed(1001,message);
     }
 
     /**
-     * 处理类上 @Validated 校验不通过产生的异常
+     * 处理类上添加 @Validated 校验不通过产生的异常，如 @RequestParam 请求参数上格式错误
      * <br/>如果有自定义消息，将会直接输出自定义customMessage
      * <br/>否则直接输出默认fieldName + defaultMessage
      */
@@ -71,9 +74,14 @@ public class GlobalExceptionHandle {
                     return fieldName + defaultMessage;
                 }).collect(Collectors.joining(";"));
         log.warn("[constraintViolationExceptionHandler] msg:{}", message);
-        return ApiResult.failed(1000,message);
+        return ApiResult.failed(1002,message);
     }
 
+    /**
+     * 全局异常捕获 - 兜底
+     * @param e 异常信息
+     * @return ApiResult<?> 统一返回
+     */
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ApiResult<?> exceptionHandler(Exception e) {
