@@ -14,34 +14,31 @@
  * limitations under the License.
  */
 
-package com.luckykuang.entity;
+package com.luckykuang.model;
 
-import com.deepoove.poi.data.NumbericRenderData;
-import com.deepoove.poi.data.TextRenderData;
+import com.luckykuang.enums.WordContentTypeEnum;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.tuple.Pair;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STNumberFormat;
-
-import java.util.List;
 
 /**
- * 列表
+ * 标签内容
+ * 对应 Word 模板标签内容如下：
+ * 文本标签 {{value}}
+ * 图片标签 {{@value}}
+ * 表格标签 {{#value}}
+ * 列表标签 {{*value}}
  * @author luckykuang
- * @date 2024/4/11 18:48
+ * @date 2024/4/11 18:47
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class ListRenderData extends LabelData {
+public class LabelData {
     /**
-     * 列表数据集
+     * 标签名称
      */
-    private List<TextRenderData> list;
-
+    private String labelName;
     /**
-     * 列表样式,支持罗马字符、有序无序等,默认为点
+     * 文件内容类型
      */
-    private Pair<STNumberFormat.Enum, String> pair = NumbericRenderData.FMT_BULLET;
+    private WordContentTypeEnum typeEnum;
 }

@@ -17,26 +17,38 @@
 package com.luckykuang.factory;
 
 import com.luckykuang.enums.WordContentTypeEnum;
-import com.luckykuang.service.GenerateWord;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * 生成word工厂
+ * 生成 Word 文档工厂类
  * @author luckykuang
  * @date 2024/4/15 10:16
  */
 public class GenerateWordFactory {
-    private static final Map<WordContentTypeEnum, GenerateWord> TYPE_BACK_DATA = new HashMap<>();
 
+    private GenerateWordFactory(){}
+
+    private static final Map<WordContentTypeEnum, GenerateWord> TYPE_BACK_DATA = new EnumMap<>(WordContentTypeEnum.class);
+
+    /**
+     * 封装不同类型的数据
+     * @param typeEnum  see {@link WordContentTypeEnum}
+     * @param word      see {@link GenerateWord}
+     */
     public static void register(WordContentTypeEnum typeEnum, GenerateWord word){
         if (Objects.nonNull(typeEnum)){
             TYPE_BACK_DATA.put(typeEnum,word);
         }
     }
 
+    /**
+     * 获取对应的文本内容
+     * @param typeEnum  see {@link WordContentTypeEnum}
+     * @return GenerateWord 文本内容
+     */
     public static GenerateWord getBackData(WordContentTypeEnum typeEnum){
         return TYPE_BACK_DATA.get(typeEnum);
     }

@@ -14,33 +14,33 @@
  * limitations under the License.
  */
 
-package com.luckykuang.enums;
+package com.luckykuang.model;
 
-import lombok.Getter;
+import com.deepoove.poi.data.HyperLinkTextRenderData;
+import com.deepoove.poi.data.TextRenderData;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
- * 图片类型
+ * 文本渲染数据
  * @author luckykuang
- * @date 2024/4/15 10:07
+ * @date 2024/4/11 18:48
  */
-@Getter
-public enum PicTypeEnum {
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
+public class TextSeriesRenderData extends LabelData {
     /**
-     * png图片
+     * 纯文本内容
      */
-    PNG(".png"),
+    private String content;
     /**
-     * JPG图片
+     * 带样式文本
      */
-    JPG(".jpg"),
+    private TextRenderData renderData;
     /**
-     * jpeg
+     * 超链接文本
      */
-    JPEG(".jpeg");
-
-    private final String picName;
-
-    PicTypeEnum(String picName) {
-        this.picName = picName;
-    }
+    private HyperLinkTextRenderData linkData;
 }

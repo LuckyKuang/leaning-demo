@@ -14,14 +14,29 @@
  * limitations under the License.
  */
 
-package com.luckykuang.service;
+package com.luckykuang.enums;
 
-import com.luckykuang.entity.LabelData;
+import lombok.Getter;
 
 /**
+ * 图表组合类型枚举
  * @author luckykuang
- * @date 2024/4/15 10:17
+ * @date 2024/4/15 10:06
  */
-public interface GenerateWord {
-    Object generateWord(LabelData data);
+@Getter
+public enum ChartsCombinationTypeEnum {
+    /**
+     * 多组合
+     */
+    MULTI("Multi"),
+    /**
+     * 单图形
+     */
+    SINGLE("Single");
+
+    private final String type;
+
+    ChartsCombinationTypeEnum(String type){
+        this.type = type;
+    }
 }

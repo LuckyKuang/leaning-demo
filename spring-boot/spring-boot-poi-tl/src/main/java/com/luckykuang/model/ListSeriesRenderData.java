@@ -14,42 +14,34 @@
  * limitations under the License.
  */
 
-package com.luckykuang.entity;
+package com.luckykuang.model;
 
-import com.luckykuang.enums.PicTypeEnum;
+import com.deepoove.poi.data.NumbericRenderData;
+import com.deepoove.poi.data.TextRenderData;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.tuple.Pair;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STNumberFormat;
 
-import java.io.File;
+import java.util.List;
 
 /**
- * 图片
+ * 列表渲染数据
  * @author luckykuang
  * @date 2024/4/11 18:48
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class PictureContentData extends LabelData {
+@EqualsAndHashCode(callSuper = true)
+public class ListSeriesRenderData extends LabelData {
     /**
-     * 图片宽度
+     * 列表数据集
      */
-    private Integer width;
+    private List<TextRenderData> list;
+
     /**
-     * 图片高度
+     * 列表样式,支持罗马字符、有序无序等,默认为点
      */
-    private Integer height;
-    /**
-     * 图片类型
-     */
-    private PicTypeEnum picType;
-    /**
-     * 图片地址（网络图片插入时使用）
-     */
-    private String picUrl;
-    /**
-     * 图片文件
-     */
-    private File file;
+    private Pair<STNumberFormat.Enum, String> pair = NumbericRenderData.FMT_BULLET;
 }

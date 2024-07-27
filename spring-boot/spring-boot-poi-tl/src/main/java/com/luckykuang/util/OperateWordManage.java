@@ -17,9 +17,9 @@
 package com.luckykuang.util;
 
 import com.deepoove.poi.XWPFTemplate;
-import com.luckykuang.entity.LabelData;
+import com.luckykuang.factory.GenerateWord;
 import com.luckykuang.factory.GenerateWordFactory;
-import com.luckykuang.service.GenerateWord;
+import com.luckykuang.model.LabelData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -41,18 +42,17 @@ public class OperateWordManage {
         FileOutputStream fos = null;
         XWPFTemplate template = null;
         try {
-            template = XWPFTemplate.compile(tempFileFile).render(new HashMap<String,Object>(contents.size()){{
-                contents.forEach(content ->{
-                    GenerateWord backData = GenerateWordFactory.getBackData(content.getTypeEnum());
-                    put(content.getLabelName(),backData.generateWord(content));
-                });
-            }});
+            Map<String,Object> map = new HashMap<>(contents.size());
+            contents.forEach(content ->{
+                GenerateWord backData = GenerateWordFactory.getBackData(content.getTypeEnum());
+                map.put(content.getLabelName(),backData.generateWord(content));
+            });
+            template = XWPFTemplate.compile(tempFileFile).render(map);
             fos = new FileOutputStream(destFilePath);
             template.write(fos);
             fos.flush();
         }catch (Exception e){
             log.error("替换生成图表报错：{}",e.getMessage());
-            e.printStackTrace();
         }finally {
             try{
                 if (Objects.nonNull(fos)){
@@ -63,7 +63,6 @@ public class OperateWordManage {
                 }
             }catch (Exception e){
                 log.error("关闭数据流报错：{}",e.getMessage());
-                e.printStackTrace();
             }
         }
     }

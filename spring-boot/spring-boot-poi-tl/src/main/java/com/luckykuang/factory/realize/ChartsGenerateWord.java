@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.luckykuang.realize;
+package com.luckykuang.factory.realize;
 
 import com.deepoove.poi.data.ChartMultiSeriesRenderData;
 import com.deepoove.poi.data.ChartSingleSeriesRenderData;
 import com.deepoove.poi.data.SeriesRenderData;
-import com.luckykuang.entity.ChartSeriesRenderData;
-import com.luckykuang.entity.LabelData;
 import com.luckykuang.enums.WordContentTypeEnum;
+import com.luckykuang.factory.GenerateWord;
 import com.luckykuang.factory.GenerateWordFactory;
-import com.luckykuang.service.GenerateWord;
-import com.luckykuang.vo.ChartSeriesRenderDataVO;
+import com.luckykuang.model.ChartsSeriesRenderData;
+import com.luckykuang.model.ChartsSeriesRenderDataItem;
+import com.luckykuang.model.LabelData;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
@@ -38,19 +38,21 @@ import java.util.Objects;
  * @date 2024/4/15 10:17
  */
 @Component
-public class ChartGenerateWord implements GenerateWord {
+public class ChartsGenerateWord implements GenerateWord {
+
     @PostConstruct
     private void init(){
-        GenerateWordFactory.register(WordContentTypeEnum.CHART,this);
+        GenerateWordFactory.register(WordContentTypeEnum.CHARTS,this);
     }
+
     @Override
     public Object generateWord(LabelData obj) {
-        ChartSeriesRenderData renderData  = (ChartSeriesRenderData) obj;
+        ChartsSeriesRenderData renderData  = (ChartsSeriesRenderData) obj;
         if (Objects.nonNull(renderData.getCharType()) && Objects.equals("Single",renderData.getCharType().getType())){
             ChartSingleSeriesRenderData singleSeriesRenderData = new ChartSingleSeriesRenderData();
             singleSeriesRenderData.setCategories(renderData.getCategories());
             singleSeriesRenderData.setChartTitle(renderData.getTitle());
-            ChartSeriesRenderDataVO seriesData = renderData.getSenderData().get(0);
+            ChartsSeriesRenderDataItem seriesData = renderData.getSenderData().get(0);
             SeriesRenderData srd = new SeriesRenderData(seriesData.getRenderTitle(),seriesData.getData());
             if (Objects.nonNull(seriesData.getComboType())){
                 srd.setComboType(seriesData.getComboType());
@@ -61,7 +63,7 @@ public class ChartGenerateWord implements GenerateWord {
             ChartMultiSeriesRenderData seriesRenderData = new ChartMultiSeriesRenderData();
             seriesRenderData.setCategories(renderData.getCategories());
             seriesRenderData.setChartTitle(renderData.getTitle());
-            List<ChartSeriesRenderDataVO> renderDataList = renderData.getSenderData();
+            List<ChartsSeriesRenderDataItem> renderDataList = renderData.getSenderData();
             List<SeriesRenderData> groupData = new ArrayList<>();
             renderDataList.forEach(data -> {
                 SeriesRenderData srd = new SeriesRenderData(data.getRenderTitle(),data.getData());

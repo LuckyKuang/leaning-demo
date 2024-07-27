@@ -14,42 +14,42 @@
  * limitations under the License.
  */
 
-package com.luckykuang.entity;
+package com.luckykuang.model;
 
-import com.luckykuang.enums.CharCombinationType;
-import com.luckykuang.vo.ChartSeriesRenderDataVO;
+import com.luckykuang.enums.PictureTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.util.List;
+import java.io.File;
 
 /**
- * 图表
+ * 图片渲染数据
  * @author luckykuang
  * @date 2024/4/11 18:48
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class ChartSeriesRenderData extends LabelData {
+@EqualsAndHashCode(callSuper = true)
+public class PictureSeriesRenderData extends LabelData {
     /**
-     * 横轴数据
+     * 图片宽度
      */
-    private String[] categories;
-
+    private Integer width;
     /**
-     * 图表名称
+     * 图片高度
      */
-    private String title;
-
+    private Integer height;
     /**
-     * 图表类型 组合
+     * 图片类型
      */
-    private CharCombinationType charType = CharCombinationType.MULTI;
-
+    private PictureTypeEnum picType;
     /**
-     * 系列对应数据
+     * 图片地址（网络图片插入时使用）
      */
-    private List<ChartSeriesRenderDataVO> senderData;
+    private String picUrl;
+    /**
+     * 图片文件
+     */
+    private File file;
 }

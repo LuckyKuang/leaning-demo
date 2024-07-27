@@ -14,33 +14,30 @@
  * limitations under the License.
  */
 
-package com.luckykuang.entity;
+package com.luckykuang.model;
 
-import com.deepoove.poi.data.HyperLinkTextRenderData;
-import com.deepoove.poi.data.TextRenderData;
+import com.deepoove.poi.data.SeriesRenderData;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 文本
+ * 图表系列对应渲染数据
  * @author luckykuang
- * @date 2024/4/11 18:48
+ * @date 2024/4/11 18:49
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class TextContentData extends LabelData {
+public class ChartsSeriesRenderDataItem {
     /**
-     * 纯文本内容
+     * 系列名称
      */
-    private String content;
+    private String renderTitle;
     /**
-     * 带样式文本
+     * 系列对应的数据
      */
-    private TextRenderData renderData;
+    private Number[] data;
     /**
-     * 超链接文本
+     * 该系列对应生成的图表类型
      */
-    private HyperLinkTextRenderData linkData;
+    private SeriesRenderData.ComboType comboType = null;
 }

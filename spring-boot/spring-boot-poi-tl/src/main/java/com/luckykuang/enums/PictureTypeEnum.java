@@ -14,29 +14,33 @@
  * limitations under the License.
  */
 
-package com.luckykuang.entity;
+package com.luckykuang.enums;
 
-import com.deepoove.poi.data.TextRenderData;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
-import java.util.List;
+import lombok.Getter;
 
 /**
+ * 图片类型支持格式枚举
  * @author luckykuang
- * @date 2024/4/11 18:48
+ * @date 2024/4/15 10:07
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
-@Accessors(chain = true)
-public class TableSeriesRenderData extends LabelData {
+@Getter
+public enum PictureTypeEnum {
     /**
-     * 表头
+     * png图片
      */
-    private TextRenderData[] header;
+    PNG(".png"),
     /**
-     * 表内容
+     * JPG图片
      */
-    private List<TextRenderData[]> contents;
+    JPG(".jpg"),
+    /**
+     * jpeg
+     */
+    JPEG(".jpeg");
+
+    private final String picName;
+
+    PictureTypeEnum(String picName) {
+        this.picName = picName;
+    }
 }

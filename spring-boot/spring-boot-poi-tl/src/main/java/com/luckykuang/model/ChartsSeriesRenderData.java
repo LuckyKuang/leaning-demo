@@ -14,25 +14,39 @@
  * limitations under the License.
  */
 
-package com.luckykuang.entity;
+package com.luckykuang.model;
 
-import com.luckykuang.enums.WordContentTypeEnum;
+import com.luckykuang.enums.ChartsCombinationTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
+ * 图表系列渲染数据
  * @author luckykuang
- * @date 2024/4/11 18:47
+ * @date 2024/4/11 18:48
  */
 @Data
 @Accessors(chain = true)
-public class LabelData {
+public class ChartsSeriesRenderData extends LabelData {
     /**
-     * 标签名称
+     * 横轴数据
      */
-    private String labelName;
+    private String[] categories;
+
     /**
-     * 文件内容类型
+     * 图表名称
      */
-    private WordContentTypeEnum typeEnum;
+    private String title;
+
+    /**
+     * 图表类型 组合
+     */
+    private ChartsCombinationTypeEnum charType = ChartsCombinationTypeEnum.MULTI;
+
+    /**
+     * 系列对应数据
+     */
+    private List<ChartsSeriesRenderDataItem> senderData;
 }

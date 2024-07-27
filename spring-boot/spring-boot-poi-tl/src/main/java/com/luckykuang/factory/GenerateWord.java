@@ -14,28 +14,15 @@
  * limitations under the License.
  */
 
-package com.luckykuang.enums;
+package com.luckykuang.factory;
 
-import lombok.Getter;
+import com.luckykuang.model.LabelData;
 
 /**
+ * 生成 Word 文档公共接口
  * @author luckykuang
- * @date 2024/4/15 10:06
+ * @date 2024/4/15 10:17
  */
-@Getter
-public enum CharCombinationType {
-    /**
-     * 多组合
-     */
-    MULTI("Multi"),
-    /**
-     * 单图形
-     */
-    Single("Single");
-
-    private final String type;
-
-    CharCombinationType(String type){
-        this.type = type;
-    }
+public interface GenerateWord {
+    Object generateWord(LabelData data);
 }

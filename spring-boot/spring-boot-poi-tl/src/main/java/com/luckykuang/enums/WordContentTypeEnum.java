@@ -17,6 +17,7 @@
 package com.luckykuang.enums;
 
 /**
+ * 文档内容类型枚举
  * @author luckykuang
  * @date 2024/4/15 10:07
  */
@@ -40,5 +41,5 @@ public enum WordContentTypeEnum {
     /**
      * 图表
      */
-    CHART;
+    CHARTS;
 }

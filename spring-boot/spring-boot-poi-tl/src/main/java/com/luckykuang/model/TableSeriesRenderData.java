@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package com.luckykuang.vo;
+package com.luckykuang.model;
 
-import com.deepoove.poi.data.SeriesRenderData;
+import com.deepoove.poi.data.TextRenderData;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
+ * 表格渲染数据
  * @author luckykuang
- * @date 2024/4/11 18:49
+ * @date 2024/4/11 18:48
  */
 @Data
 @Accessors(chain = true)
-public class ChartSeriesRenderDataVO {
+@EqualsAndHashCode(callSuper = true)
+public class TableSeriesRenderData extends LabelData {
     /**
-     * 系列名称
+     * 表头
      */
-    private String renderTitle;
+    private TextRenderData[] header;
     /**
-     * 系列对应的数据
+     * 表内容
      */
-    private Number[] data;
-    /**
-     * 该系列对应生成的图表类型
-     */
-    private SeriesRenderData.ComboType comboType = null;
+    private List<TextRenderData[]> contents;
 }

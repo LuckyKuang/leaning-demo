@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2024/4/15 13:51
  */
 @RestController
-@RequestMapping("/poitl")
+@RequestMapping("/poi/tl")
 public class ApachePoiTLController {
 
     @Resource

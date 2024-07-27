@@ -14,39 +14,33 @@
  * limitations under the License.
  */
 
-package com.luckykuang.realize;
+package com.luckykuang.factory.realize;
 
-import com.deepoove.poi.data.PictureRenderData;
-import com.deepoove.poi.util.BytePictureUtils;
-import com.luckykuang.entity.LabelData;
-import com.luckykuang.entity.PictureContentData;
+import com.deepoove.poi.data.NumbericRenderData;
 import com.luckykuang.enums.WordContentTypeEnum;
+import com.luckykuang.factory.GenerateWord;
 import com.luckykuang.factory.GenerateWordFactory;
-import com.luckykuang.service.GenerateWord;
+import com.luckykuang.model.LabelData;
+import com.luckykuang.model.ListSeriesRenderData;
 import jakarta.annotation.PostConstruct;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
+ * 列表类型
  * @author luckykuang
  * @date 2024/4/15 10:19
  */
 @Component
-public class PictureGenerateWord implements GenerateWord {
+public class ListGenerateWord implements GenerateWord {
+
     @PostConstruct
     private void init(){
-        GenerateWordFactory.register(WordContentTypeEnum.PICTURE,this);
+        GenerateWordFactory.register(WordContentTypeEnum.LIST,this);
     }
 
     @Override
     public Object generateWord(LabelData data) {
-        PictureContentData picture = (PictureContentData) data;
-        return StringUtils.isNotBlank(picture.getPicUrl())
-                ? new PictureRenderData(
-                        picture.getWidth(),
-                        picture.getHeight(),
-                        picture.getPicType().getPicName(),
-                        BytePictureUtils.getUrlBufferedImage(picture.getPicUrl()))
-                : new PictureRenderData(picture.getWidth(),picture.getHeight(),picture.getFile());
+        ListSeriesRenderData listData =  (ListSeriesRenderData) data;
+        return new NumbericRenderData(listData.getPair(),listData.getList());
     }
 }

@@ -14,39 +14,35 @@
  * limitations under the License.
  */
 
-package com.luckykuang.realize;
+package com.luckykuang.factory.realize;
 
-import com.deepoove.poi.data.MiniTableRenderData;
-import com.deepoove.poi.data.RowRenderData;
-import com.luckykuang.entity.LabelData;
-import com.luckykuang.entity.TableSeriesRenderData;
 import com.luckykuang.enums.WordContentTypeEnum;
+import com.luckykuang.factory.GenerateWord;
 import com.luckykuang.factory.GenerateWordFactory;
-import com.luckykuang.service.GenerateWord;
+import com.luckykuang.model.LabelData;
+import com.luckykuang.model.TextSeriesRenderData;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 /**
+ * 文本类型
  * @author luckykuang
  * @date 2024/4/15 10:20
  */
 @Component
-public class TableGenerateWord implements GenerateWord {
+public class TextGenerateWord implements GenerateWord {
+
     @PostConstruct
-    private void init(){
-        GenerateWordFactory.register(WordContentTypeEnum.TABLE,this);
+    public void init(){
+        GenerateWordFactory.register(WordContentTypeEnum.TEXT,this);
     }
+
     @Override
     public Object generateWord(LabelData data) {
-        TableSeriesRenderData tableData = (TableSeriesRenderData) data;
-        RowRenderData header = RowRenderData.build(tableData.getHeader());
-        List<RowRenderData> contentData = new ArrayList<>();
-        tableData.getContents().forEach(con ->{
-            contentData.add(RowRenderData.build(con));
-        });
-        return new MiniTableRenderData(header,contentData);
+        TextSeriesRenderData contentData = (TextSeriesRenderData) data;
+        return Objects.nonNull(contentData.getLinkData()) ? contentData.getLinkData() :
+                Objects.nonNull(contentData.getRenderData()) ? contentData.getRenderData() : contentData.getContent();
     }
 }
