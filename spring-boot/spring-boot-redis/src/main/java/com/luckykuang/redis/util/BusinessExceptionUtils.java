@@ -24,6 +24,7 @@ public class BusinessExceptionUtils {
         List<String> stackTraceList = new ArrayList<>();
         for (StackTraceElement stackTraceElement : stackTrace) {
             String stackTraceMsg = stackTraceElement.toString();
+            // 对异常详情进行换行
             stackTraceList.add(stackTraceMsg + "\n");
         }
         log.error("异常类型：{},异常信息：{},异常详情：{}",e.getClass().getName(),e.getMessage(),stackTraceList);

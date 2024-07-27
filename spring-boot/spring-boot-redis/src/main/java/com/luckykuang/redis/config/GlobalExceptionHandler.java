@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @ControllerAdvice
-public class GlobalExceptionHandle {
+public class GlobalExceptionHandler {
 
     /**
      * 处理方法上添加 @Valid/@Validated 校验不通过产生的异常，如 @RequestBody 请求参数上格式错误

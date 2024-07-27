@@ -114,33 +114,34 @@ Eureka 2.0.0
 
 ## 端口维护
 ```text
-9012	chain-of-responsibility-pattern
-9005	strategy-pattern
-9009	easyexcel
-9023	jakarta-websocket-client
-9022	jakarta-websocket-server
-9020	mongodb
-9021	netty-websocket
-9015	rocketmq
-9010	sentinel-client
-9011	sentinel-server
-9000	gateway-server
-9003	grpc-client
-9004	grpc-server
-9016	mqtt-publish-a
-9017	mqtt-publish-b
-9002	openfeign-client
-9001	openfeign-server
-9006    rabbitmq
-9007    serial-port
-9008    ping-ip
-9013    statemachine
-9014    file
-9024    netty-mqtt
-9025    netty-mqtt web
-9026    sse
-9027    netty-udp-client web
-9028    netty-udp-server
-9029    netty-tcp-client web
-9030    netty-tcp-server
+9012	chain-of-responsibility-pattern     责任链模式案例
+9005	strategy-pattern                    策略模式案例
+9009	easyexcel                           Excel导入/导出案例
+9023	jakarta-websocket-client            Websocket客户端案例
+9022	jakarta-websocket-server            Websocket服务端案例
+9020	mongodb                             MongoDB案例
+9021	netty-websocket                     基于Netty的Websocket服务端案例
+9015	rocketmq                            RocketMQ案例
+9010	sentinel-client                     Sentinel请求方案例
+9011	sentinel-server                     Sentinel限流方案例
+9000	gateway-server                      Gateway网关案例
+9003	grpc-client                         GRpc客户端案例
+9004	grpc-server                         GRpc服务端案例
+9016	mqtt-publish-a                      Mqtt客户端案例A
+9017	mqtt-publish-b                      Mqtt客户端案例B
+9002	openfeign-client                    Openfeign请求方案例
+9001	openfeign-server                    Openfeign响应方案例
+9006    rabbitmq                            RabbitMQ案例
+9007    serial-port                         串口协议通信案例
+9008    ping-ip                             基于IP/PORT搜寻机器案例
+9013    statemachine                        Spring状态机案例
+9014    file                                文件零拷贝案例
+9024    netty-mqtt                          基于Netty的Mqtt客户端/服务端案例
+9025    netty-mqtt web                      基于Netty的Mqtt客户端/服务端案例
+9026    sse                                 Server-Sent Events通信协议案例
+9027    netty-udp-client web                基于Netty的UDP客户端案例
+9028    netty-udp-server                    基于Netty的UDP服务端案例
+9029    netty-tcp-client web                基于Netty的TCP客户端案例
+9030    netty-tcp-server                    基于Netty的TCP服务端案例
+9099    redis                               Redis案例
 ```
