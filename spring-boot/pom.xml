@@ -53,6 +53,7 @@
         <module>spring-boot-sse</module>
         <module>spring-boot-redis</module>
         <module>spring-boot-aop</module>
+        <module>spring-boot-poi-tl</module>
     </modules>
 
     <dependencies>
@@ -97,7 +98,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>33.1.0-jre</version>
+            <version>32.1.1-jre</version>
             <scope>compile</scope>
         </dependency>
 
