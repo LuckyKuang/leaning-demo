@@ -18,6 +18,7 @@ package com.luckykuang.model;
 
 import com.luckykuang.enums.ChartsCombinationTypeEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 public class ChartsSeriesRenderData extends LabelData {
     /**
      * 横轴数据

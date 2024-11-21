@@ -28,7 +28,7 @@ import java.io.Serial;
  * @date 2023/9/19 11:21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class SerialPortStatusVO extends SerialPortParam {
 
     @Serial

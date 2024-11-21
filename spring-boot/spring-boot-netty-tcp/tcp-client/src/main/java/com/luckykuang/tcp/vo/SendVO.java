@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
  * @date 2023/11/21 16:53
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class SendVO extends ConnectVO {
     /**
      * 发送数据

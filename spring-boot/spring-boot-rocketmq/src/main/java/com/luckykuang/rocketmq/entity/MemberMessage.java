@@ -26,7 +26,7 @@ import java.time.LocalDate;
  * @date 2023/10/22 23:09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class MemberMessage extends BaseMessage{
     private String userName;
     private LocalDate birthday;
