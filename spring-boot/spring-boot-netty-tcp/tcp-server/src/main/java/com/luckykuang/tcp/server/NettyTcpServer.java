@@ -71,6 +71,8 @@ public class NettyTcpServer {
             serverBootstrap.option(ChannelOption.SO_REUSEADDR,true);
             // 启用心跳保活机制，tcp，默认2小时发一次心跳
             serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
+            // 禁用nagle算法
+            serverBootstrap.childOption(ChannelOption.TCP_NODELAY, true);
             // 自定义处理器
             serverBootstrap.childHandler(serverChannelInitializer);
             // 绑定服务端端口，开启监听，同步等待

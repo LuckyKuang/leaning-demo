@@ -23,6 +23,7 @@ import com.luckykuang.thread.entity.User;
 import com.luckykuang.thread.mapper.UserMapper;
 import com.luckykuang.thread.service.UserService;
 import com.luckykuang.thread.utils.ResponseUtils;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Resource
+    private UserService userService;
 
     @Override
     public void exportUserExcel(HttpServletResponse response) {
@@ -65,7 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                     .head(User.class)
                     .sheet()
                     .doReadSync();
-            saveBatch(userList);
+            userService.saveBatch(userList);
             return ResponseEntity.ok(userList);
         } catch (IOException e) {
             log.error("用户列表导入异常: ",e);

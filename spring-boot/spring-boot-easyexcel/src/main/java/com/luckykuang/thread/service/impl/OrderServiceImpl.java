@@ -25,6 +25,7 @@ import com.luckykuang.thread.service.OrderService;
 import com.luckykuang.thread.strategy.ExcelMergeStrategy;
 import com.luckykuang.thread.utils.ResponseUtils;
 import com.luckykuang.thread.utils.ThreadPoolUtils;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,9 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements OrderService {
+
+    @Resource
+    private OrderService orderService;
 
     @Override
     public void exportOrderExcel(HttpServletResponse response) {
@@ -94,7 +98,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
             // 每次拆分后的数据
             List<Order> subList = orderList.subList(i, endIndex);
             // 异步处理数据导入 runAsync()是没有回调的异步，supplyAsync()是有回调的异步
-            futures.add(CompletableFuture.runAsync(() -> saveBatch(subList), executorService));
+            futures.add(CompletableFuture.runAsync(() -> orderService.saveBatch(subList), executorService));
         }
 
         try {
