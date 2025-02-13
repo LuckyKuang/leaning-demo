@@ -41,6 +41,7 @@
         <module>spring-cloud-grpc</module>
         <module>spring-cloud-alibaba-sentinel</module>
         <module>spring-cloud-mqtt</module>
+        <module>spring-cloud-excel</module>
     </modules>
 
     <dependencies>

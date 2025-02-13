@@ -100,6 +100,8 @@ Eureka 2.0.0
 
 - [5.MQTT发布/订阅案例](./spring-cloud/spring-cloud-mqtt)
 
+- [6.公共的Excel导出/导入服务案例](./spring-cloud/spring-cloud-excel)
+
 ## 本项目启动步骤
 
 1. 必须安装jdk17+版本，因为代码中用到了新特性
@@ -146,4 +148,7 @@ Eureka 2.0.0
 9099    redis                               Redis案例
 9031    poi-tl                              Word文档导出
 9032    aop                                 Spring AOP案例
+8081    excel-export                        公共的Excel导出服务
+8082    excel-import                        公共的Excel导入服务
+8088    excel-test                          Excel导入导出测试服务
 ```
