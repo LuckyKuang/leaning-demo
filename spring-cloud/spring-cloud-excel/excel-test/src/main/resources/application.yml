@@ -1,0 +1,88 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8088
+
+spring:
+  application:
+    name: excel-test
+  cloud:
+    consul:
+      host: 192.168.1.100 # 这里是consul服务端的地址
+      port: 8500 # 这是consul服务端的端口
+      discovery:
+        health-check-timeout: 5s # 检测超时时间
+        health-check-critical-timeout: 10s # 设置超时30秒之后，注销服务,这里数字要大于心跳检测的数字
+        heartbeat:
+          enabled: true
+          ttl: 5 # 这里开启心跳检测，设置10s提交一次心跳，用于consul与服务不在同一个网段的情况，支持存活检测
+        prefer-ip-address: true
+        instance-group: default # 设置实例所在组
+    openfeign:
+      client:
+        config:
+          # 提供方的服务名
+          excel-export:
+            # 请求日志级别
+            logger-level: FULL
+            # 连接超时时间，默认2s，设置单位为毫秒
+            connect-timeout: 5000
+            # 请求处理超时时间，默认5s，设置单位为毫秒。
+            read-timeout: 10000
+          # 提供方的服务名
+          excel-import:
+            # 请求日志级别
+            logger-level: FULL
+            # 连接超时时间，默认2s，设置单位为毫秒
+            connect-timeout: 5000
+            # 请求处理超时时间，默认5s，设置单位为毫秒。
+            read-timeout: 10000
+      # 开启熔断器
+      circuitbreaker:
+        enabled: true
+  # 数据库配置
+  datasource:
+    # Hikari连接池
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.1.100:3306/excel?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true
+    username: root
+    password: 123456
+    hikari:
+      # 最大连接池数量
+      maximum-pool-size: 20
+      # 最小空闲线程数量
+      minimum-idle: 10
+      # 配置获取连接等待超时的时间
+      connectionTimeout: 30000
+      # 校验超时时间
+      validationTimeout: 5000
+      # 空闲连接存活最大时间，默认10分钟
+      idleTimeout: 600000
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+      maxLifetime: 1800000
+      # 连接测试query（配置检测连接是否有效）
+      connectionTestQuery: SELECT 1
+      # 多久检查一次连接的活性
+      keepaliveTime: 30000
+  # 文件上传限制
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+mybatis-plus:
+  configuration:
+    # 自动驼峰命名规则（camel case）映射
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      # 主键类型
+      # AUTO 自增, NONE 空, INPUT 用户输入, ASSIGN_ID 雪花, ASSIGN_UUID 唯一UUID
+      idType: ASSIGN_ID
+      logic-delete-field: delFlag # 全局逻辑删除的实体字段名
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+    sequence:
+      worker-id: ${random.long(1,31)}
+      datacenter-id: ${random.long(1,31)}

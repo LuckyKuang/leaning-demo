@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!--应用名称-->
+    <property name="PROJECT_NAME" value="excel-export"/>
+    <!-- 日志存放路径 -->
+    <property name="LOG_PATH" value="./logs"/>
+    <!-- 日志输出格式 -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] --- [%15.15(%thread)] [%-40.40(%logger{40})] : %msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) --- [%15.15(%thread)] %cyan(%-40.40(%logger{40})) : %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 系统日志输出 -->
+	<appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件路径和名称-->
+	    <file>${LOG_PATH}/${PROJECT_NAME}-info.log</file>
+        <!--是否追加到文件末尾,默认为true-->
+        <append>true</append>
+        <param name="Encoding" value="UTF-8" />
+        <!-- 循环政策：基于时间和容量创建日志文件 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+			<fileNamePattern>${LOG_PATH}/${PROJECT_NAME}-info.%d.%i.log</fileNamePattern>
+			<!-- 日志最大的历史保留时间 60天 -->
+			<maxHistory>60</maxHistory>
+            <!-- 日志最大的历史保留容量 20GB -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 每10MG分割一次 -->
+            <maxFileSize>10MB</maxFileSize>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+    <!-- 过滤出来的报错日志输出 -->
+	<appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件路径和名称-->
+	    <file>${LOG_PATH}/${PROJECT_NAME}-error.log</file>
+        <!--是否追加到文件末尾,默认为true-->
+        <append>true</append>
+        <param name="Encoding" value="UTF-8" />
+        <!-- 循环政策：基于时间和容量创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${LOG_PATH}/${PROJECT_NAME}-error.%d.%i.log</fileNamePattern>
+            <!-- 日志最大的历史保留时间 60天 -->
+            <maxHistory>60</maxHistory>
+            <!-- 日志最大的历史保留容量 20GB -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 每10MG分割一次 -->
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤的级别 -->
+            <level>ERROR</level>
+			<!-- 匹配时的操作：接收（记录） -->
+            <onMatch>ACCEPT</onMatch>
+			<!-- 不匹配时的操作：拒绝（不记录） -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+	<!-- 系统模块日志级别控制  -->
+	<logger name="com.luckykuang" level="info" />
+	<!-- Spring日志级别控制  -->
+	<logger name="org.springframework" level="warn" />
+
+	<root level="info">
+		<appender-ref ref="console" />
+	</root>
+	
+	<!--系统操作日志-->
+    <root level="info">
+        <appender-ref ref="file_info" />
+        <appender-ref ref="file_error" />
+    </root>
+</configuration>
