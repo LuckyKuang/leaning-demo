@@ -64,6 +64,7 @@ public class EsDocument {
 
     /**
      * 创建时间
+     * TODO 无法设置时区，导致时间搜索有问题，目前Easy—ES 2.1.0版本无法解决
      */
     @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @IndexField(fieldType = FieldType.DATE, dateFormat = "yyyy-MM-dd HH:mm:ss")
@@ -71,9 +72,10 @@ public class EsDocument {
 
     /**
      * 时间
+     * TODO 无法设置时区，导致时间搜索有问题，目前Easy—ES 2.1.0版本只能通过将时区写入时间字段临时解决
      */
     @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    @IndexField(fieldType = FieldType.DATE, dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @IndexField(fieldType = FieldType.DATE, dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date dateTime;
 
     /**

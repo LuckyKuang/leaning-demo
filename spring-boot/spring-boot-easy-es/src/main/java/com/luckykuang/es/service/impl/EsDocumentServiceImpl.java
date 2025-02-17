@@ -117,7 +117,6 @@ public class EsDocumentServiceImpl implements EsDocumentService {
             wrapper.eq(esDocumentQO.getMysqlId() != null, EsDocument::getMysqlId, esDocumentQO.getId());
             wrapper.like(StringUtils.isNotBlank(esDocumentQO.getTitle()), EsDocument::getTitle, esDocumentQO.getTitle());
             wrapper.like(StringUtils.isNotBlank(esDocumentQO.getContent()), EsDocument::getContent, esDocumentQO.getContent());
-            // TODO 时间查询还存在问题，等Easy-ES后续优化
             wrapper.between(esDocumentQO.getStartTime() != null && esDocumentQO.getEndTime() != null,
                     EsDocument::getDateTime, esDocumentQO.getStartTime(), esDocumentQO.getEndTime(),
                     TimeZone.getDefault().toZoneId(), "yyyy-MM-dd HH:mm:ss");
