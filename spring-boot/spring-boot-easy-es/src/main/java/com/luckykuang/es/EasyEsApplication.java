@@ -1,6 +1,6 @@
 package com.luckykuang.es;
 
-import org.dromara.easyes.starter.register.EsMapperScan;
+import org.dromara.easyes.spring.annotation.EsMapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -1,4 +1,4 @@
-package com.luckykuang.es.entity;
+package com.luckykuang.es.model.entity;
 
 import lombok.Data;
 

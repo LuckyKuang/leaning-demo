@@ -1,12 +1,10 @@
-package com.luckykuang.es.entity;
+package com.luckykuang.es.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.dromara.easyes.annotation.HighLight;
 import org.dromara.easyes.annotation.IndexField;
 import org.dromara.easyes.annotation.IndexId;
 import org.dromara.easyes.annotation.IndexName;
-import org.dromara.easyes.annotation.rely.FieldStrategy;
+import org.dromara.easyes.annotation.rely.Analyzer;
 import org.dromara.easyes.annotation.rely.FieldType;
 import org.dromara.easyes.annotation.rely.IdType;
 
@@ -33,7 +31,7 @@ public class EsOrder implements Serializable {
      * 订单名称
      * 注意：想要支持中文搜索，需要自行安装es的ik或者pinyin插件
      */
-    @IndexField(fieldType = FieldType.TEXT)
+    @IndexField(fieldType = FieldType.TEXT, analyzer = Analyzer.IK_MAX_WORD)
     private String orderName;
 
     /**

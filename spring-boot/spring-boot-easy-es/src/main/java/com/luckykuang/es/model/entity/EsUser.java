@@ -1,7 +1,8 @@
-package com.luckykuang.es.entity;
+package com.luckykuang.es.model.entity;
 
 import lombok.Data;
 import org.dromara.easyes.annotation.*;
+import org.dromara.easyes.annotation.rely.Analyzer;
 import org.dromara.easyes.annotation.rely.FieldStrategy;
 import org.dromara.easyes.annotation.rely.FieldType;
 import org.dromara.easyes.annotation.rely.IdType;
@@ -29,7 +30,7 @@ public class EsUser implements Serializable {
     /**
      * 名称
      */
-    @IndexField(strategy = FieldStrategy.NOT_EMPTY, fieldType = FieldType.TEXT, analyzer = "ik_max_word")
+    @IndexField(strategy = FieldStrategy.NOT_EMPTY, fieldType = FieldType.TEXT, analyzer = Analyzer.IK_MAX_WORD)
     // 需要被高亮的字段
     @HighLight(mappingField = "nameHighlightContent", preTag = "<font color='red'>", postTag = "</font>")
     private String name;
@@ -37,7 +38,7 @@ public class EsUser implements Serializable {
     /**
      * 别名
      */
-    @IndexField(strategy = FieldStrategy.NOT_EMPTY,fieldType = FieldType.TEXT, analyzer = "ik_max_word")
+    @IndexField(strategy = FieldStrategy.NOT_EMPTY,fieldType = FieldType.TEXT, analyzer = Analyzer.IK_MAX_WORD)
     private String nickName;
 
     /**
