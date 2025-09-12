@@ -2,7 +2,6 @@ package com.luckykuang.excel.service.impl;
 
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.support.ExcelTypeEnum;
-import com.luckykuang.excel.controller.ExportController;
 import com.luckykuang.excel.enums.ExportBusiness;
 import com.luckykuang.excel.enums.ExportStatus;
 import com.luckykuang.excel.mapper.ExportManagerMapper;
@@ -50,7 +49,7 @@ public class ExportServiceImpl implements ExportService {
         try {
             ExportProcessor exportProcessor = exportProcessorFactory.getExportProcessor(exportBusiness);
             List<?> list = exportProcessor.process(exportManagerDTO);
-            String fileName = ExportController.class.getResource("/").getPath() + exportBusiness.getName() + "_" + System.currentTimeMillis() + ".xlsx";
+            String fileName = this.getClass().getResource("/").getPath() + exportBusiness.getName() + "_" + System.currentTimeMillis() + ".xlsx";
             // 这里 需要指定写用哪个class去读，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
             // 如果这里想使用03 则 传入excelType参数即可
             EasyExcelFactory.write(fileName, exportBusiness.getClazz())

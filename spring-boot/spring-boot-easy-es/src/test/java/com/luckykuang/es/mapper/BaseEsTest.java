@@ -1,11 +1,10 @@
 package com.luckykuang.es.mapper;
 
-import com.luckykuang.es.entity.EsUser;
+import com.luckykuang.es.model.entity.EsUser;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.easyes.core.conditions.select.LambdaEsQueryWrapper;
 import org.dromara.easyes.core.conditions.update.LambdaEsUpdateWrapper;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

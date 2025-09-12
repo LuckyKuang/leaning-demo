@@ -1,6 +1,6 @@
 package com.luckykuang.es.mapper;
 
-import com.luckykuang.es.entity.EsUser;
+import com.luckykuang.es.model.entity.EsUser;
 import org.dromara.easyes.core.kernel.BaseEsMapper;
 
 /**
