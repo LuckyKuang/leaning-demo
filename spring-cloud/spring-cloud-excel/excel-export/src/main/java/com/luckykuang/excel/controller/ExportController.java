@@ -23,7 +23,7 @@ public class ExportController {
     private final ExportService exportService;
 
     @PostMapping("exportExcel")
-    public void exportExcel(@RequestBody ExportManagerDTO exportManagerDTO) {
+    public void exportExcel(@RequestBody ExportManagerDTO<?> exportManagerDTO) {
         exportService.exportExcel(exportManagerDTO);
     }
 }

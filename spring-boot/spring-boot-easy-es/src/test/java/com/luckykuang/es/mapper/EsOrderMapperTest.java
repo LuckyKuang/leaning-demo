@@ -1,6 +1,6 @@
 package com.luckykuang.es.mapper;
 
-import com.luckykuang.es.entity.EsOrder;
+import com.luckykuang.es.model.entity.EsOrder;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.easyes.core.conditions.select.LambdaEsQueryWrapper;

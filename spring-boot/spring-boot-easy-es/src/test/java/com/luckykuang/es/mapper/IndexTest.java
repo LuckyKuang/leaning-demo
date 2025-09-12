@@ -1,6 +1,6 @@
 package com.luckykuang.es.mapper;
 
-import com.luckykuang.es.entity.Depart;
+import com.luckykuang.es.model.entity.Depart;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.easyes.annotation.rely.FieldType;
