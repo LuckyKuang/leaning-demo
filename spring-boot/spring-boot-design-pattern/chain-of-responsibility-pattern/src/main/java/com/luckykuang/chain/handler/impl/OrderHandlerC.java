@@ -24,17 +24,28 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 
 /**
+ * 第三级别
  * @author luckykuang
  * @date 2023/7/21 11:03
  */
 @Slf4j
 public class OrderHandlerC extends OrderHandler {
+
+    /**
+     * 抽象方法，判断是否满足条件
+     * @param req 订单请求
+     * @return 是否满足条件
+     */
     protected boolean checkRequest(OrderReq req) {
         // 第三级别且小于等于该级别设置的金额
         return Objects.equals(OrderEnum.SENIOR.getLevel(), req.getLevel())
                 && OrderEnum.SENIOR.getAmount().compareTo(req.getAmount()) > -1;
     }
 
+    /**
+     * 抽象方法，处理请求
+     * @param req 订单请求
+     */
     protected void processRequest(OrderReq req) {
         // 满足第三级别退款条件，触发此节点，直接给用户退款
         log.info("满足第三级别退款条件 level:{},amount:{}", req.getLevel(),req.getAmount());
