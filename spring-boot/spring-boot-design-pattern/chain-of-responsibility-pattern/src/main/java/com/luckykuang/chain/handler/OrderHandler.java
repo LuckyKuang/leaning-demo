@@ -21,11 +21,16 @@ import com.luckykuang.chain.request.OrderReq;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 抽象处理类
  * @author luckykuang
- * @date 2023/7/21 9:38
+ * @date 2023/7/21 11:03
  */
 @Slf4j
 public abstract class OrderHandler {
+
+    /**
+     * 下一个节点
+     */
     private OrderHandler nextOrderHandler;
 
     /**
@@ -48,13 +53,23 @@ public abstract class OrderHandler {
         // 如果不满足上个节点的条件，继续递归寻找下个节点
         else if (nextOrderHandler != null) {
             nextOrderHandler.handleRequest(req);
-        }else {
-            // 条件都不满足，进行人工审核退款
+        }
+        // 条件都不满足，进行人工审核退款
+        else {
             OrderHandlerOther.processRequest(req);
         }
     }
 
+    /**
+     * 抽象方法，判断是否满足条件
+     * @param req 订单请求
+     * @return 是否满足条件
+     */
     protected abstract boolean checkRequest(OrderReq req);
 
+    /**
+     * 抽象方法，处理请求
+     * @param req 订单请求
+     */
     protected abstract void processRequest(OrderReq req);
 }

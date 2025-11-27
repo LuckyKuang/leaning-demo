@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 人工审核退款
  * @author luckykuang
  * @date 2023/7/25 17:54
  */
@@ -29,6 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OrderHandlerOther {
 
+    /**
+     * 处理请求
+     * @param req 订单请求
+     */
     public static void processRequest(OrderReq req) {
         log.info("存入人工审核退款表 level:{},amount:{}", req.getLevel(), req.getAmount());
         // 此处写逻辑，将不符合自动退款条件的退款，进行人工审核
