@@ -55,6 +55,7 @@
         <module>spring-boot-aop</module>
         <module>spring-boot-poi-tl</module>
         <module>spring-boot-easy-es</module>
+        <module>spring-boot-redis-lock</module>
     </modules>
 
     <dependencies>
