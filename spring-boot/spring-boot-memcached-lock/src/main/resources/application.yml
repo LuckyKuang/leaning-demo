@@ -1,0 +1,27 @@
+server:
+  port: 9035
+
+spring:
+  application:
+    name: memcached-lock-demo
+
+# Memcached配置
+memcached:
+  # 服务器地址，多个用逗号分隔
+  servers: 192.168.1.100:11211
+  # 连接池大小
+  pool-size: 10
+  # 连接超时时间(ms)
+  connection-timeout: 3000
+  # 操作超时时间(ms)
+  operation-timeout: 10000
+  # 是否使用Nagle算法
+  use-nagle: false
+  # 心跳检测间隔(s)
+  heartbeat-interval: 60
+
+# 日志配置
+logging:
+  level:
+    com.luckykuang: debug
+    net.rubyeye.xmemcached: info
