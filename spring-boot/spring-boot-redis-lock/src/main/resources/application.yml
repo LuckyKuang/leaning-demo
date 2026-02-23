@@ -1,0 +1,25 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: redis-lock-demo
+
+  # Redis配置
+  data:
+    redis:
+      host: 192.168.1.100
+      port: 6379
+      password: 123456
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+# 日志配置
+logging:
+  level:
+    com.luckykuang: debug
