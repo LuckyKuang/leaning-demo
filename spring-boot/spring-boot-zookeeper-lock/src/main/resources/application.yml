@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: zookeeper-lock-demo
+
+# Zookeeper配置
+zookeeper:
+  # 连接地址，多个用逗号分隔
+  connect-string: 192.168.1.100:2181
+  # 会话超时时间(ms)
+  session-timeout: 5000
+  # 连接超时时间(ms)
+  connection-timeout: 3000
+  # 重试间隔时间(ms)
+  base-sleep-time: 1000
+  # 最大重试次数
+  max-retries: 3
+
+# 日志配置
+logging:
+  level:
+    com.luckykuang: debug
+    org.apache.curator: info

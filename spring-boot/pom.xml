@@ -56,6 +56,7 @@
         <module>spring-boot-poi-tl</module>
         <module>spring-boot-easy-es</module>
         <module>spring-boot-redis-lock</module>
+        <module>spring-boot-zookeeper-lock</module>
     </modules>
 
     <dependencies>
