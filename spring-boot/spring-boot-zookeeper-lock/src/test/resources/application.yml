@@ -1,0 +1,13 @@
+# Zookeeper配置
+zookeeper:
+  connect-string: 192.168.1.100:2181
+  session-timeout: 5000
+  connection-timeout: 3000
+  base-sleep-time: 1000
+  max-retries: 3
+
+# 日志配置
+logging:
+  level:
+    com.luckykuang: debug
+    org.apache.curator: info
