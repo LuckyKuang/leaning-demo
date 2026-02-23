@@ -102,6 +102,12 @@ Eureka 2.0.0
 
 - [6.公共的Excel导出/导入服务案例](./spring-cloud/spring-cloud-excel)
 
+### 五、分布式锁相关
+
+- [Redis分布式锁案例](./spring-boot/spring-boot-redis-lock)
+- [Zookeeper分布式锁案例](./spring-boot/spring-boot-zookeeper-lock)
+- [Memcached分布式锁案例](./spring-boot/spring-boot-memcached-lock)
+
 ## 本项目启动步骤
 
 1. 必须安装jdk17+版本，因为代码中用到了新特性
@@ -151,4 +157,7 @@ Eureka 2.0.0
 8081    excel-export                        公共的Excel导出服务
 8082    excel-import                        公共的Excel导入服务
 8088    excel-test                          Excel导入导出测试服务
+9033    redis-lock                          Redis分布式锁案例
+9034    zookeeper-lock                      Zookeeper分布式锁案例
+9035    memcached-lock                      Memcached分布式锁案例
 ```
